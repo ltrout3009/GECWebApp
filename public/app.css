@@ -1,23 +1,9 @@
-body {
-    background: #232834;
-    color: whitesmoke;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.detail_header {
+    text-decoration: underline;
+    text-align: center;
 }
 
-.button {
-    text-decoration: none;
-    padding: 0.5rem;
-    border: 2px solid #000;
-    border-radius: 10px;
-    background-color: #70ad47;
-    color: whitesmoke;
-}
-
-.button:hover {
-    background: #f7ba01;
-    color: #000
-}
-
-.button:active {
-    background: #fff
+.detail_label {
+    text-align: right;
+    display: inline-block;
 }

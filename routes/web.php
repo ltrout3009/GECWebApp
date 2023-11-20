@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
 Route::get('/', function () {
     return view('testpage');
+});
+*/
+
+Route::get('/', function () {
+    return redirect(backpack_url('dashboard'));
 });
