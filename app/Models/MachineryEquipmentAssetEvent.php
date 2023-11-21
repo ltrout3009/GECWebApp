@@ -18,7 +18,7 @@ class MachineryEquipmentAssetEvent extends Model
      * @var array
      */
     protected $fillable = [
-        'machinery_equipment_asset_id',
+        'mach_eqpt_asset_id',
         'event_type_id',
         'event_status_id',
         'event_interval_id',
@@ -38,7 +38,7 @@ class MachineryEquipmentAssetEvent extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'machinery_equipment_asset_id' => 'integer',
+        'mach_eqpt_asset_id' => 'integer',
         'event_type_id' => 'integer',
         'event_status_id' => 'integer',
         'event_interval_id' => 'integer',

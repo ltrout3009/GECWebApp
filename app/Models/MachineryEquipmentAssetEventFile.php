@@ -18,7 +18,7 @@ class MachineryEquipmentAssetEventFile extends Model
      * @var array
      */
     protected $fillable = [
-        'machinery_equipment_asset_event_id',
+        'me_asset_event_id',
         'file_name',
         'file_path',
     ];
@@ -30,7 +30,7 @@ class MachineryEquipmentAssetEventFile extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'machinery_equipment_asset_event_id' => 'integer',
+        'me_asset_event_id' => 'integer',
     ];
 
     public function machineryEquipmentAssetEvent(): BelongsTo

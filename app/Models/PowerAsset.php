@@ -18,7 +18,7 @@ class PowerAsset extends Model
      * @var array
      */
     protected $fillable = [
-        'accumatica_asset_id',
+        'acumatica_asset_id',
         'asset_class_id',
         'asset_type_id',
         'property_type_id',
@@ -106,7 +106,7 @@ class PowerAsset extends Model
 
     public function assetStatusType(): BelongsTo
     {
-        return $this->belongsTo(AssetStatusType::class);
+        return $this->belongsTo(AssetStatusType::class, 'status_id');
     }
 
     public function assetLienholder(): BelongsTo

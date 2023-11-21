@@ -39,12 +39,82 @@ class RentalAssetCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::setDefaultPageLength(15);
+        CRUD::disablePersistentTable();
+        CRUD::removeAllButtonsFromStack('top');
+        CRUD::setOperationSetting('lineButtonsAsDropdown', true);
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::orderBy('displayed_num', 'asc');
+
+        CRUD::addColumns ([
+
+            [
+                'label' => 'Status',
+                'type' => 'text',
+                'name' => 'assetStatusType.status_type',
+                'orderable'  => true,
+                'orderLogic' => function ($query, $column, $columnDirection) {
+                        return $query->leftJoin('asset_status_types', 'rental_assets.status_id', '=', 'asset_status_types.id')
+                                     ->orderBy('asset_status_types.status_type', $columnDirection)->select('rental_assets.*');
+                    },
+                'wrapper' => [
+                    'element' => 'span',
+                    'class'   => function ($crud, $column, $entry, $related_key) {
+                        if ($column['text'] == 'Available') {
+                            return 'badge rounded-pill bg-success';
+                        } elseif ($column['text'] == 'On Rent') {
+                            return 'badge rounded-pill bg-danger';
+                        } elseif ($column['text'] == 'Retired') {
+                            return 'badge rounded-pill bg-info';
+                        } 
+                        return 'badge rounded-pill bg-warning';
+                    },
+                ],
+            ],
+
+            [
+                'label' => 'Asset #',
+                'type' => 'text',
+                'name' => 'displayed_num',
+            ],
+
+            [
+                'label' => 'Old #',
+                'type' => 'text',
+                'name' => 'old_num',
+            ],
+
+            [
+                'label' => 'Type',
+                'type' => 'select',
+                'name' => 'assetClass',
+            ],
+
+            [
+                'label' => 'Capacity',
+                'type' => 'integer',
+                'name' => 'capacity',
+            ],
+
+            [
+                'label' => 'Unit',
+                'type' => 'text',
+                'name' => 'capacity_unit',
+            ],
+
+            [
+                'label' => 'Serial #',
+                'type' => 'text',
+                'name' => 'serial_vin_num',
+            ],
+
+            [
+                'label' => 'Property Type',
+                'type' => 'select',
+                'name' => 'propertyType',
+            ],
+
+        ]);
     }
 
     /**

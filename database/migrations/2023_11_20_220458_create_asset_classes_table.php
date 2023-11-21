@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('asset_classes', function (Blueprint $table) {
             $table->id();
-            $table->string('accumatica_asset_class_id', 255)->nullable();
+            $table->string('acumatica_asset_class_id', 255)->nullable();
             $table->string('asset_class_name', 255)->nullable();
             $table->string('description', 4000)->nullable();
             $table->timestamps();

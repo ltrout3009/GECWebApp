@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('machinery_equipment_asset_events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('machinery_equipment_asset_id')->constrained();
+            $table->foreignId('mach_eqpt_asset_id')->constrained();
             $table->foreignId('event_type_id')->constrained();
             $table->foreignId('event_status_id')->constrained('event_status_types');
             $table->foreignId('event_interval_id')->constrained('event_interval_types');

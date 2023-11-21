@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('machinery_equipment_asset_event_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('machinery_equipment_asset_event_id')->constrained();
+            $table->foreignId('me_asset_event_id')->constrained();
             $table->string('file_name', 255);
             $table->string('file_path', 255);
             $table->timestamps();

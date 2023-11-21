@@ -17,7 +17,7 @@ class Branch extends Model
      * @var array
      */
     protected $fillable = [
-        'accumatica_branch_id',
+        'acumatica_branch_id',
         'branch_name',
     ];
 

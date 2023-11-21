@@ -18,7 +18,7 @@ class MachineryEquipmentAssetMileage extends Model
      * @var array
      */
     protected $fillable = [
-        'machinery_equipment_asset_id',
+        'mach_eqpt_asset_id',
         'mileage_date',
         'mileage',
     ];
@@ -30,7 +30,7 @@ class MachineryEquipmentAssetMileage extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'machinery_equipment_asset_id' => 'integer',
+        'mach_eqpt_asset_id' => 'integer',
         'mileage_date' => 'date',
     ];
 

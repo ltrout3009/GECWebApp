@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('machinery_equipment_asset_notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('machinery_equipment_asset_id')->constrained();
+            $table->foreignId('mach_eqpt_asset_id')->constrained();
             $table->string('note', 5000);
             $table->date('note_date');
             $table->timestamps();

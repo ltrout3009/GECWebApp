@@ -18,7 +18,7 @@ class AssetType extends Model
      * @var array
      */
     protected $fillable = [
-        'accumatica_asset_type_id',
+        'acumatica_asset_type_id',
         'description',
     ];
 

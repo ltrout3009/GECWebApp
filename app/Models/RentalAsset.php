@@ -80,7 +80,7 @@ class RentalAsset extends Model
 
     public function assetStatusType(): BelongsTo
     {
-        return $this->belongsTo(AssetStatusType::class);
+        return $this->belongsTo(AssetStatusType::class, 'status_id');
     }
 
     public function propertyType(): BelongsTo

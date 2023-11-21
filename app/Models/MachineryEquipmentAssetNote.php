@@ -18,7 +18,7 @@ class MachineryEquipmentAssetNote extends Model
      * @var array
      */
     protected $fillable = [
-        'machinery_equipment_asset_id',
+        'mach_eqpt_asset_id',
         'note',
         'note_date',
     ];
@@ -30,7 +30,7 @@ class MachineryEquipmentAssetNote extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'machinery_equipment_asset_id' => 'integer',
+        'mach_eqpt_asset_id' => 'integer',
         'note_date' => 'date',
     ];
 

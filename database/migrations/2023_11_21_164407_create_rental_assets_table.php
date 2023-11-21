@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('rental_assets', function (Blueprint $table) {
             $table->id();
-            $table->string('accumatica_asset_id', 255)->nullable();
+            $table->string('acumatica_asset_id', 255)->nullable();
             $table->foreignId('asset_class_id')->nullable()->constrained();
             $table->foreignId('asset_type_id')->nullable()->constrained();
             $table->foreignId('property_type_id')->nullable()->constrained();

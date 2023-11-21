@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
-            $table->string('accumatica_branch_id', 255);
+            $table->string('acumatica_branch_id', 255);
             $table->string('branch_name', 255);
             $table->timestamps();
         });
