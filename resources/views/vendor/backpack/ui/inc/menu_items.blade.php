@@ -63,3 +63,23 @@
 <x-backpack::menu-item title="Event types" icon="la la-question" :link="backpack_url('event-type')" />
 <x-backpack::menu-item title="Event interval types" icon="la la-question" :link="backpack_url('event-interval-type')" />
 <x-backpack::menu-item title="Power assets" icon="la la-question" :link="backpack_url('power-asset')" />
+<x-backpack::menu-item title="Power asset event files" icon="la la-question" :link="backpack_url('power-asset-event-file')" />
+<x-backpack::menu-item title="Power asset events" icon="la la-question" :link="backpack_url('power-asset-event')" />
+<x-backpack::menu-item title="Power asset mileages" icon="la la-question" :link="backpack_url('power-asset-mileage')" />
+<x-backpack::menu-item title="Power asset notes" icon="la la-question" :link="backpack_url('power-asset-note')" />
+<x-backpack::menu-item title="Non power assets" icon="la la-question" :link="backpack_url('non-power-asset')" />
+<x-backpack::menu-item title="Non power asset event files" icon="la la-question" :link="backpack_url('non-power-asset-event-file')" />
+<x-backpack::menu-item title="Non power asset events" icon="la la-question" :link="backpack_url('non-power-asset-event')" />
+<x-backpack::menu-item title="Non power asset mileages" icon="la la-question" :link="backpack_url('non-power-asset-mileage')" />
+<x-backpack::menu-item title="Non power asset notes" icon="la la-question" :link="backpack_url('non-power-asset-note')" />
+<x-backpack::menu-item title="Machinery equipment asset event files" icon="la la-question" :link="backpack_url('machinery-equipment-asset-event-file')" />
+<x-backpack::menu-item title="Machinery equipment asset events" icon="la la-question" :link="backpack_url('machinery-equipment-asset-event')" />
+<x-backpack::menu-item title="Machinery equipment asset mileages" icon="la la-question" :link="backpack_url('machinery-equipment-asset-mileage')" />
+<x-backpack::menu-item title="Machinery equipment asset notes" icon="la la-question" :link="backpack_url('machinery-equipment-asset-note')" />
+<x-backpack::menu-item title="Machinery equipment assets" icon="la la-question" :link="backpack_url('machinery-equipment-asset')" />
+<x-backpack::menu-item title="Bulk waste logs" icon="la la-question" :link="backpack_url('bulk-waste-log')" />
+<x-backpack::menu-item title="Rental asset event files" icon="la la-question" :link="backpack_url('rental-asset-event-file')" />
+<x-backpack::menu-item title="Rental asset events" icon="la la-question" :link="backpack_url('rental-asset-event')" />
+<x-backpack::menu-item title="Rental asset transactions" icon="la la-question" :link="backpack_url('rental-asset-transaction')" />
+<x-backpack::menu-item title="Rental asset notes" icon="la la-question" :link="backpack_url('rental-asset-note')" />
+<x-backpack::menu-item title="Rental assets" icon="la la-question" :link="backpack_url('rental-asset')" />

@@ -41,4 +41,24 @@ Route::group([
     Route::crud('event-type', 'EventTypeCrudController');
     Route::crud('event-interval-type', 'EventIntervalTypeCrudController');
     Route::crud('power-asset', 'PowerAssetCrudController');
+    Route::crud('power-asset-event-file', 'PowerAssetEventFileCrudController');
+    Route::crud('power-asset-event', 'PowerAssetEventCrudController');
+    Route::crud('power-asset-mileage', 'PowerAssetMileageCrudController');
+    Route::crud('power-asset-note', 'PowerAssetNoteCrudController');
+    Route::crud('non-power-asset', 'NonPowerAssetCrudController');
+    Route::crud('non-power-asset-event-file', 'NonPowerAssetEventFileCrudController');
+    Route::crud('non-power-asset-event', 'NonPowerAssetEventCrudController');
+    Route::crud('non-power-asset-mileage', 'NonPowerAssetMileageCrudController');
+    Route::crud('non-power-asset-note', 'NonPowerAssetNoteCrudController');
+    Route::crud('machinery-equipment-asset-event-file', 'MachineryEquipmentAssetEventFileCrudController');
+    Route::crud('machinery-equipment-asset-event', 'MachineryEquipmentAssetEventCrudController');
+    Route::crud('machinery-equipment-asset-mileage', 'MachineryEquipmentAssetMileageCrudController');
+    Route::crud('machinery-equipment-asset-note', 'MachineryEquipmentAssetNoteCrudController');
+    Route::crud('machinery-equipment-asset', 'MachineryEquipmentAssetCrudController');
+    Route::crud('bulk-waste-log', 'BulkWasteLogCrudController');
+    Route::crud('rental-asset-event-file', 'RentalAssetEventFileCrudController');
+    Route::crud('rental-asset-event', 'RentalAssetEventCrudController');
+    Route::crud('rental-asset-transaction', 'RentalAssetTransactionCrudController');
+    Route::crud('rental-asset-note', 'RentalAssetNoteCrudController');
+    Route::crud('rental-asset', 'RentalAssetCrudController');
 }); // this should be the absolute last line of this file

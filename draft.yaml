@@ -1,37 +1,10 @@
 models:
-  PowerAsset:
+  BulkWasteLog:
     id
-    accumatica_asset_id: string:255 nullable
-    asset_class_id: id foreign:asset_classes.id nullable
-    asset_type_id: id foreign:asset_types.id nullable
-    property_type_id: id foreign:property_types.id nullable
-    location_id: id foreign:locations.id nullable
-    assigned_branch_id: id foreign:branches.id nullable
-    assigned_person_id: id foreign:users.id nullable
-    status_id: id foreign:asset_status_types.id nullable
-    lienholder_id: id foreign:asset_lienholders.id nullable
-    owner_id: id foreign:asset_owners.id nullable
-    is_commercial_motor_vehicle: boolean nullable
-    fleet_num: string nullable
-    receipt_date: date nullable
-    in_service_date: date nullable
-    retired_date: date nullable
-    useful_life: integer nullable
-    quantity: integer nullable
-    description: string:5000 nullable
-    carrying_capacity_lbs: integer nullable
-    gvwr: integer nullable
-    empty_weight_lbs: integer nullable
-    color: string:255 nullable
-    drive_tire_size: string:255 nullable
-    steer_tire_size: string:255 nullable
-    fuel_type: string:255 nullable
-    transmission: string:255 nullable
-    license_plate_num: string:255 nullable
-    tx_tag_num: string:255 nullable
-    voyager_card_num: integer nullable
-    serial_vin_num: string:255 nullable
-    is_insurance_needed: boolean nullable
+    rental_asset_event_id: id foreign:rental_asset_events.id
+    bulk_waste_container_type_id: id foreign:bulk_waste_container_types.id
+    amount: double:10,2
+    material: string:255
     timestamps
     relationships:
-      BelongsTo: \App\Models\AssetClass, \App\Models\AssetType, \App\Models\PropertyType, \App\Models\Location, \App\Models\Branch, \App\Models\User, \App\Models\AssetStatusType, \App\Models\AssetLienholder, \App\Models\AssetOwner
+      BelongsTo: \App\Models\BulkWasteContainerType, \App\Models\Amount
