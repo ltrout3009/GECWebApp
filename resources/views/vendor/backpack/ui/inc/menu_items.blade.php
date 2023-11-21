@@ -42,10 +42,10 @@
 </x-backpack::menu-dropdown>
 
 <x-backpack::menu-dropdown title="Asset Tracking" icon="la la-search">
-    <x-backpack::menu-dropdown-item title="Rentals" icon="la la-dumpster" />
-    <x-backpack::menu-dropdown-item title="Powered" icon="la la-truck-moving" />
-    <x-backpack::menu-dropdown-item title="Non-Powered" icon="la la-truck-loading" />
-    <x-backpack::menu-dropdown-item title="Machinery & Equipment" icon="la la-tools" />
+    <x-backpack::menu-dropdown-item title="Rentals" icon="la la-dumpster" :link="backpack_url('rental-asset')" />
+    <x-backpack::menu-dropdown-item title="Powered" icon="la la-truck-moving" :link="backpack_url('power-asset')" />
+    <x-backpack::menu-dropdown-item title="Non-Powered" icon="la la-truck-loading" :link="backpack_url('non-power-asset')" />
+    <x-backpack::menu-dropdown-item title="Machinery & Equipment" icon="la la-tools" :link="backpack_url('machinery-equipment-asset')" />
 </x-backpack::menu-dropdown>
 
 
@@ -71,12 +71,10 @@
     <x-backpack::menu-dropdown-item title="Event status types" icon="la la-question" :link="backpack_url('event-status-type')" />
     <x-backpack::menu-dropdown-item title="Event types" icon="la la-question" :link="backpack_url('event-type')" />
     <x-backpack::menu-dropdown-item title="Event interval types" icon="la la-question" :link="backpack_url('event-interval-type')" />
-    <x-backpack::menu-dropdown-item title="Power assets" icon="la la-question" :link="backpack_url('power-asset')" />
     <x-backpack::menu-dropdown-item title="Power asset event files" icon="la la-question" :link="backpack_url('power-asset-event-file')" />
     <x-backpack::menu-dropdown-item title="Power asset events" icon="la la-question" :link="backpack_url('power-asset-event')" />
     <x-backpack::menu-dropdown-item title="Power asset mileages" icon="la la-question" :link="backpack_url('power-asset-mileage')" />
     <x-backpack::menu-dropdown-item title="Power asset notes" icon="la la-question" :link="backpack_url('power-asset-note')" />
-    <x-backpack::menu-dropdown-item title="Non power assets" icon="la la-question" :link="backpack_url('non-power-asset')" />
     <x-backpack::menu-dropdown-item title="Non power asset event files" icon="la la-question" :link="backpack_url('non-power-asset-event-file')" />
     <x-backpack::menu-dropdown-item title="Non power asset events" icon="la la-question" :link="backpack_url('non-power-asset-event')" />
     <x-backpack::menu-dropdown-item title="Non power asset mileages" icon="la la-question" :link="backpack_url('non-power-asset-mileage')" />
@@ -85,13 +83,11 @@
     <x-backpack::menu-dropdown-item title="Machinery equipment asset events" icon="la la-question" :link="backpack_url('machinery-equipment-asset-event')" />
     <x-backpack::menu-dropdown-item title="Machinery equipment asset mileages" icon="la la-question" :link="backpack_url('machinery-equipment-asset-mileage')" />
     <x-backpack::menu-dropdown-item title="Machinery equipment asset notes" icon="la la-question" :link="backpack_url('machinery-equipment-asset-note')" />
-    <x-backpack::menu-dropdown-item title="Machinery equipment assets" icon="la la-question" :link="backpack_url('machinery-equipment-asset')" />
     <x-backpack::menu-dropdown-item title="Bulk waste logs" icon="la la-question" :link="backpack_url('bulk-waste-log')" />
     <x-backpack::menu-dropdown-item title="Rental asset event files" icon="la la-question" :link="backpack_url('rental-asset-event-file')" />
     <x-backpack::menu-dropdown-item title="Rental asset events" icon="la la-question" :link="backpack_url('rental-asset-event')" />
     <x-backpack::menu-dropdown-item title="Rental asset transactions" icon="la la-question" :link="backpack_url('rental-asset-transaction')" />
     <x-backpack::menu-dropdown-item title="Rental asset notes" icon="la la-question" :link="backpack_url('rental-asset-note')" />
-    <x-backpack::menu-dropdown-item title="Rental assets" icon="la la-question" :link="backpack_url('rental-asset')" />
     <x-backpack::menu-dropdown-item title="Users" icon="la la-question" :link="backpack_url('user')" />
 </x-backpack::menu-dropdown>
 

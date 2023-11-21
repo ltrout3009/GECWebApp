@@ -106,7 +106,7 @@ class NonPowerAsset extends Model
 
     public function assetStatusType(): BelongsTo
     {
-        return $this->belongsTo(AssetStatusType::class), 'status_id';
+        return $this->belongsTo(AssetStatusType::class, 'status_id');
     }
 
     public function assetLienholder(): BelongsTo

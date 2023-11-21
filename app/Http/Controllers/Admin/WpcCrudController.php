@@ -15,7 +15,7 @@ use \App\Models\Pricing;
 use \App\Models\Profile;
 use \App\Models\Waste;
 use \App\Models\Wpc;
-
+use Backpack\CRUD\app\Library\Widget;
 
 /**
  * Class WpcCrudController
@@ -94,7 +94,34 @@ class WpcCrudController extends CrudController
 
     protected function setupShowOperation()
     {
-        $this->crud->setShowView('waste_costs');
+       Widget::add([
+        'type' => 'alert',
+        'class' => 'alert alert-dark mb-2',
+        'heading' => '<b>' . Wpc::find(\Route::current()->parameter('id'))->id . '</b>: ',
+        'content' => null,
+        'close_button' => false,
+       ])->to('before_content');
+
+       Widget::add([
+        'type'           => 'relation_table',
+        'name'           => 'wastes',
+        'label'          => 'TEST Wastes',
+        'backpack_crud'  => 'waste',
+        'visible' => True,
+        'relation_attribute' => 'id',
+        'button_create' => true,
+        'button_delete' => true,
+        'columns' => [
+            [
+                'label' => 'TSDF',
+                'closure' => function($entry){
+                    return "{$entry->facility->name}$";
+                }
+            ],
+        ],
+    ])->to('after_content');
+    
+
     }
 
     /**
