@@ -134,4 +134,9 @@ class RentalAsset extends Model
     {
         return $this->hasMany(RentalAssetNote::class);
     }
+
+    public function rental_events(): HasMany
+    {
+        return $this->hasMany(RentalAssetEvent::class);
+    }
 }

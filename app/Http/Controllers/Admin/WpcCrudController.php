@@ -107,7 +107,6 @@ class WpcCrudController extends CrudController
         'name'           => 'waste_costs',
         'label'          => 'Costs',
         'backpack_crud'  => 'waste',
-        'visible' => True,
         'relation_attribute' => 'id',
         'button_create' => false,
         'button_delete' => false,
@@ -115,6 +114,9 @@ class WpcCrudController extends CrudController
         'button_show' => false,
         'buttons' => false,
         'search' => true,
+        'visible' => function($entry){
+            return $entry->waste_costs->count() > 0;
+        },
         'columns' => [
             [
                 'label' => 'TSDF',

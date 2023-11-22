@@ -162,7 +162,7 @@
             </tr>
         @endforeach
         </tbody>
-        <tfoot>
+        <!-- <tfoot>
         <tr>
             @foreach($widget['columns'] as $column)
                 <th>{{$column['label']}}</th>
@@ -171,7 +171,7 @@
                 <th rowspan="1" colspan="1">{{ trans('backpack::crud.actions') }}</th>
             @endif
         </tr>
-        </tfoot>
+        </tfoot> -->
     </table>
     @if ($widget['per_page'])
         {{$items->links('backpack::rwfb-pagination')}}

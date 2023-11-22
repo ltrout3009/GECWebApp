@@ -123,6 +123,8 @@ class RentalAssetCrudController extends CrudController
     {
         CRUD::removeAllButtons();
 
+        //CRUD::setOperationSetting('tabsType', 'vertical');
+
         // Title Widget
         Widget::add([
             'type' => 'alert',
@@ -153,6 +155,7 @@ class RentalAssetCrudController extends CrudController
         CRUD::column('latest_transaction.pickup_order_num')->label('Pickup Order #')->type('select')->tab('Latest Rental');
         CRUD::column('latest_transaction.transaction_notes')->label('Notes')->type('select')->limit(100)->tab('Latest Rental');
 
+        // margin widget
         Widget::add([
             'type' => 'div',
             'class' => 'row',
@@ -165,7 +168,6 @@ class RentalAssetCrudController extends CrudController
             'name' => 'rental_transactions',
             'label' => 'Rental History',
             'backpack_crud' => 'rentalassettransaction',
-            'visible' => true,
             'relation_attribute' => 'id',
             'button_create' => false,
             'button_delete' => true,
@@ -173,8 +175,10 @@ class RentalAssetCrudController extends CrudController
             'button_show' => false,
             'buttons' => true,
             'search' => true,
+            'visible' => function($entry){
+                return $entry->rental_transactions->count() > 0;
+            },
             'columns' => [
-
                 [
                     'label' => 'Generator #',
                     'closure' => function($entry){
@@ -228,13 +232,19 @@ class RentalAssetCrudController extends CrudController
             ],
         ])->to('after_content');
 
+        // margin widget
+        Widget::add([
+            'type' => 'div',
+            'class' => 'row',
+            'style' => 'margin-bottom: 50px',
+        ])->to('after_content');
+
         // Notes
         Widget::add([
             'type' => 'relation_table',
             'name' => 'rental_notes',
             'label' => 'Asset Notes',
             'backpack_crud' => 'rentalassetnotes',
-            'visible' => true,
             'relation_attribute' => 'id',
             'button_create' => false,
             'button_delete' => true,
@@ -242,11 +252,14 @@ class RentalAssetCrudController extends CrudController
             'button_show' => false,
             'buttons' => true,
             'search' => true,
+            'visible' => function($entry){
+                return $entry->rental_notes->count() > 0;
+            },
             'columns' => [
                 [
                     'label' => 'Date',
                     'closure' => function($entry){
-                        return "{$entry->note_date}";
+                        return date_format($entry->note_date, 'n/j/Y');
                     }
                 ],
                 [
@@ -255,6 +268,75 @@ class RentalAssetCrudController extends CrudController
                         return "{$entry->note}";
                     }
                 ],
+            ],
+        ])->to('after_content');
+
+        // margin widget
+        Widget::add([
+            'type' => 'div',
+            'class' => 'row',
+            'style' => 'margin-bottom: 50px',
+        ])->to('after_content');
+
+        // Events
+        Widget::add([
+            'type' => 'relation_table',
+            'name' => 'rental_events',
+            'label' => 'Rental Events',
+            'backpack_crud' => 'rentalassetevents',
+            'relation_attribute' => 'id',
+            'button_create' => false,
+            'button_delete' => true,
+            'button_edit' => true,
+            'button_show' => false,
+            'buttons' => true,
+            'search' => true,
+            'visible' => function($entry){
+                return $entry->rental_events->count() >= 0;
+            },
+            'columns' => [
+                [
+                    'label' => 'Event Type',
+                    'closure' => function($entry){
+                        return "{$entry->eventType->event_type_name}";
+                    }
+                ],
+                [
+                    'label' => 'Status',
+                    'closure' => function($entry){
+                        return "{$entry->eventStatusType->status_type_name}";
+                    }
+                ],
+                [
+                    'label' => 'Created Date',
+                    'closure' => function($entry){
+                        return "{$entry->created_date}";
+                    }
+                ],
+                [
+                    'label' => 'Due Date',
+                    'closure' => function($entry){
+                        return "{$entry->due_date}";
+                    }
+                ],
+                [
+                    'label' => 'Start Date',
+                    'closure' => function($entry){
+                        return "{$entry->start_date}";
+                    }
+                ],
+                [
+                    'label' => 'Completed Date',
+                    'closure' => function($entry){
+                        return "{$entry->completed_date}";
+                    }
+                ],
+                [
+                    'label' => 'Cost',
+                    'closure' => function($entry){
+                        return "{$entry->cost}";
+                    }
+                ],                
             ],
         ])->to('after_content');
     }
