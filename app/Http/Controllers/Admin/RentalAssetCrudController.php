@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\RentalAssetRequest;
+use App\Models\RentalAsset;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\Widget;
 
 /**
  * Class RentalAssetCrudController
@@ -115,6 +117,116 @@ class RentalAssetCrudController extends CrudController
             ],
 
         ]);
+    }
+
+    protected function setupShowOperation() 
+    {
+        CRUD::removeAllButtons();
+
+        // Title Widget
+        Widget::add([
+            'type' => 'alert',
+            'class' => 'alert alert-dark mb-2',
+            'heading' => '<b> Rental Asset: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->displayed_num ,
+            'content' => null,
+            'close_button' => false,
+            'wrapper' => ['class' => 'col-sm-6 col-md-4', 'style' => 'margin-bottom: 50px;',]
+           ])->to('before_content');
+
+        // Details Tab
+        CRUD::column('displayed_num')->label('Asset #')->type('text')->tab('Details');
+        CRUD::column('old_num')->label('Old #')->type('text')->tab('Details');
+        CRUD::column('assetClass')->label('Asset Type')->type('select')->tab('Details');
+        CRUD::column('capacity')->label('Capacity')->type('integer')->tab('Details');
+        CRUD::column('capacity_unit')->label('Unit')->type('text')->tab('Details');
+        CRUD::column('assetOwner')->label('Owner')->type('select')->tab('Details');
+        CRUD::column('propertyType')->label('Property Type')->type('select')->tab('Details');
+        CRUD::column('serial_vin_num')->label('Serial Number')->type('text')->tab('Details');
+
+        // Current/Recent Tab TODO: This should show the LATEST/Current generator renting this box
+        CRUD::column('latest_transaction.generator.id')->label('Generator Number')->type('select')->tab('Latest Rental');
+        CRUD::column('latest_transaction.generator.name')->label('Generator Name')->type('select')->tab('Latest Rental');
+        CRUD::column('latest_transaction.on_rent_date')->label('On Rent Date')->type('date')->format('M/D/Y')->tab('Latest Rental');
+        CRUD::column('latest_transaction.off_rent_date')->label('Off Rent Date')->type('date')->format('M/D/Y')->tab('Latest Rental');
+        CRUD::column('latest_transaction.release_date')->label('Release Date')->type('date')->format('M/D/Y')->tab('Latest Rental');
+        CRUD::column('latest_transaction.delivery_order_num')->label('Delivery Order #')->type('select')->tab('Latest Rental');
+        CRUD::column('latest_transaction.pickup_order_num')->label('Pickup Order #')->type('select')->tab('Latest Rental');
+        CRUD::column('latest_transaction.transaction_notes')->label('Notes')->type('select')->limit(100)->tab('Latest Rental');
+
+        Widget::add([
+            'type' => 'div',
+            'class' => 'row',
+            'style' => 'margin-bottom: 50px',
+        ])->to('after_content');
+
+        // Rental History
+        Widget::add([
+            'type' => 'relation_table',
+            'name' => 'rental_transactions',
+            'label' => 'Rental History',
+            'backpack_crud' => 'rentalassettransaction',
+            'visible' => true,
+            'relation_attribute' => 'id',
+            'button_create' => false,
+            'button_delete' => true,
+            'button_edit' => true,
+            'button_show' => false,
+            'buttons' => true,
+            'search' => true,
+            'columns' => [
+
+                [
+                    'label' => 'Generator #',
+                    'closure' => function($entry){
+                        return "{$entry->generator_id}";
+                    }
+                ],
+                [
+                    'label' => 'Generator Name',
+                    'closure' => function($entry){
+                        return "{$entry->generator->name}";
+                    }
+                ],
+                [
+                    'label' => 'On Rent Date',
+                    'closure' => function($entry){
+                        return date_format($entry->on_rent_date, 'n/j/Y');
+                    }
+                ],
+                [
+                    'label' => 'Off Rent Date',
+                    'closure' => function($entry){
+                        return date_format($entry->off_rent_date, 'n/j/Y');
+                    }
+                ],
+                [
+                    'label' => 'Release Date',
+                    'closure' => function($entry){
+                        return date_format($entry->release_date, 'n/j/Y');
+                    }
+                ],
+                [
+                    'label' => 'Delivery Order #',
+                    'closure' => function($entry){
+                        return "{$entry->delivery_order_num}";
+                    }
+                ],
+                [
+                    'label' => 'Pickup Order #',
+                    'closure' => function($entry){
+                        return "{$entry->pickup_order_num}";
+                    }
+                ],
+                [
+                    'label' => 'Rental Notes',
+                    'closure' => function($entry){
+                        return "{$entry->transaction_notes}";
+                    },
+                    'limit' => 100,
+                ],
+
+            ],
+        ])->to('after_content');
     }
 
     /**

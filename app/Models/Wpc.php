@@ -17,5 +17,10 @@ class Wpc extends Model
     {
         return $this->hasMany(Waste::class);
     }
+
+    public function waste_costs(): HasMany
+    {
+        return $this->hasMany(Waste::class, 'wpc_id')->orderBy('facility_id', 'asc')->orderBy('container_id', 'desc');
+    }
     
 }

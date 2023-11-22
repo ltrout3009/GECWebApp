@@ -6,6 +6,8 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RentalAsset extends Model
 {
@@ -115,7 +117,16 @@ class RentalAsset extends Model
 
     public function assetOwner(): BelongsTo
     {
-        return $this->belongsTo(AssetOwner::class);
+        return $this->belongsTo(AssetOwner::class, 'owner_id');
     }
 
+    public function rental_transactions(): HasMany
+    {
+        return $this->hasMany(RentalAssetTransaction::class);
+    }
+
+    public function latest_transaction(): HasOne 
+    {
+        return $this->hasOne(RentalAssetTransaction::class)->latestOfMany();
+    }
 }
