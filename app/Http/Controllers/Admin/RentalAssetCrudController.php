@@ -127,7 +127,7 @@ class RentalAssetCrudController extends CrudController
         Widget::add([
             'type' => 'alert',
             'class' => 'alert alert-dark mb-2',
-            'heading' => '<b> Rental Asset: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->displayed_num ,
+            'heading' => '<b> Asset: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->displayed_num . "<br> Status: " . RentalAsset::find(\Route::current()->parameter('id'))->assetStatusType->status_type ,
             'content' => null,
             'close_button' => false,
             'wrapper' => ['class' => 'col-sm-6 col-md-4', 'style' => 'margin-bottom: 50px;',]
@@ -225,6 +225,36 @@ class RentalAssetCrudController extends CrudController
                     'limit' => 100,
                 ],
 
+            ],
+        ])->to('after_content');
+
+        // Notes
+        Widget::add([
+            'type' => 'relation_table',
+            'name' => 'rental_notes',
+            'label' => 'Asset Notes',
+            'backpack_crud' => 'rentalassetnotes',
+            'visible' => true,
+            'relation_attribute' => 'id',
+            'button_create' => false,
+            'button_delete' => true,
+            'button_edit' => true,
+            'button_show' => false,
+            'buttons' => true,
+            'search' => true,
+            'columns' => [
+                [
+                    'label' => 'Date',
+                    'closure' => function($entry){
+                        return "{$entry->note_date}";
+                    }
+                ],
+                [
+                    'label' => 'Note',
+                    'closure' => function($entry){
+                        return "{$entry->note}";
+                    }
+                ],
             ],
         ])->to('after_content');
     }

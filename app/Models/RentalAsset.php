@@ -129,4 +129,9 @@ class RentalAsset extends Model
     {
         return $this->hasOne(RentalAssetTransaction::class)->latestOfMany();
     }
+
+    public function rental_notes(): HasMany 
+    {
+        return $this->hasMany(RentalAssetNote::class);
+    }
 }
