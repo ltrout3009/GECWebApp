@@ -56,7 +56,52 @@ class RentalAssetTransactionCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(RentalAssetTransactionRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        //CRUD::setFromDb(); // set fields from db columns.
+
+        CRUD::addFields([
+            /*
+            [
+                'label' => 'Asset ID',
+                'type' => 'text',
+                'name' => 'code',
+                'default' => request()->input('code', ''),
+            ],
+            */
+            [
+                'label'     => "Asset #",
+                'type'      => 'select',
+                'name'      => 'rental_asset_id',
+                'default'   => request()->input('code', ''),
+                'entity'    => 'rentalAsset',
+                'model'     => "App\Models\RentalAsset",
+                'attribute' => 'displayed_num',
+            ],
+            [
+                'label'     => "Generator",
+                'type'      => 'select',
+                'name'      => 'generator_id',
+                'entity'    => 'generator',
+                'model'     => "App\Models\Generator",
+                'attribute' => 'FullGenerator',
+            ],
+            [
+                'label' => 'On Rent Date',
+                'type' => 'date',
+                'name' => 'on_rent_date',
+            ],
+            [
+                'label' => 'Delivery Order Number',
+                'type' => 'number',
+                'name' => 'delivery_order_num',
+            ],
+            [
+                'label' => 'Notes',
+                'type' => 'textarea',
+                'name' => 'transaction_notes',
+            ],
+
+        ]);
+
 
         /**
          * Fields can be defined using the fluent syntax:

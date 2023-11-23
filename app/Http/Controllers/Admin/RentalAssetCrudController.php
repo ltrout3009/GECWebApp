@@ -20,6 +20,7 @@ class RentalAssetCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -33,6 +34,7 @@ class RentalAssetCrudController extends CrudController
         CRUD::setEntityNameStrings('rental asset', 'rental assets');
     }
 
+    
     /**
      * Define what happens when the List operation is loaded.
      * 
@@ -44,7 +46,9 @@ class RentalAssetCrudController extends CrudController
         CRUD::setDefaultPageLength(15);
         CRUD::disablePersistentTable();
         CRUD::removeAllButtonsFromStack('top');
-        CRUD::setOperationSetting('lineButtonsAsDropdown', true);
+        CRUD::setOperationSetting('lineButtonsAsDropdown', false);
+
+        CRUD::addButtonFromView('line', 'rentBox', 'rent-box', 'beginning');
 
         CRUD::orderBy('displayed_num', 'asc');
 
@@ -194,19 +198,22 @@ class RentalAssetCrudController extends CrudController
                 [
                     'label' => 'On Rent Date',
                     'closure' => function($entry){
-                        return date_format($entry->on_rent_date, 'n/j/Y');
+                        //return date_format($entry->on_rent_date, 'n/j/Y');
+                        return $entry->on_rent_date;
                     }
                 ],
                 [
                     'label' => 'Off Rent Date',
                     'closure' => function($entry){
-                        return date_format($entry->off_rent_date, 'n/j/Y');
+                        //return date_format($entry->off_rent_date, 'n/j/Y');
+                        return $entry->off_rent_date;
                     }
                 ],
                 [
                     'label' => 'Release Date',
                     'closure' => function($entry){
-                        return date_format($entry->release_date, 'n/j/Y');
+                        //return date_format($entry->release_date, 'n/j/Y');
+                        return $entry->release_date;
                     }
                 ],
                 [
@@ -367,5 +374,10 @@ class RentalAssetCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function rentBox() 
+    {
+        
     }
 }
