@@ -39,6 +39,8 @@ class GeneratorCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        
+        
         /* Initial Setup Options */
         CRUD::setDefaultPageLength(15);
         CRUD::disablePersistentTable();

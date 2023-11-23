@@ -69,12 +69,12 @@ class RentalAssetEvent extends Model
 
     public function eventStatusType(): BelongsTo
     {
-        return $this->belongsTo(EventStatusType::class);
+        return $this->belongsTo(EventStatusType::class, 'event_status_id');
     }
 
     public function eventIntervalType(): BelongsTo
     {
-        return $this->belongsTo(EventIntervalType::class);
+        return $this->belongsTo(EventIntervalType::class, 'event_interval_id');
     }
 
     public function wasteDispositionTsType(): BelongsTo
