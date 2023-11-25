@@ -62,6 +62,4 @@ Route::group([
     Route::crud('rental-asset-note', 'RentalAssetNoteCrudController');
     Route::crud('rental-asset', 'RentalAssetCrudController');
     Route::crud('user', 'UserCrudController');
-    Route::get('rental-asset/{id}/rentBox', 'RentalAssetCrudController@rentBox');
-    // Route::get('user/{id}/moderate', 'UserCrudController@moderate');
 }); // this should be the absolute last line of this file

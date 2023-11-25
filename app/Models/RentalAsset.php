@@ -139,4 +139,6 @@ class RentalAsset extends Model
     {
         return $this->hasMany(RentalAssetEvent::class);
     }
+
+
 }

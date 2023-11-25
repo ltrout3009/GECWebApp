@@ -28,7 +28,8 @@ class RentalAssetTransaction extends Model
         'release_date',
         'delivery_order_num',
         'pickup_order_num',
-        'transaction_notes',
+        'on_rent_notes',
+        'off_rent_notes',
     ];
 
     /**

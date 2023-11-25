@@ -7,6 +7,8 @@ use App\Models\RentalAsset;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
+use Illuminate\Support\Facades\DB;
+use App\Models\Generator;
 
 /**
  * Class RentalAssetCrudController
@@ -21,6 +23,7 @@ class RentalAssetCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
+    use \App\Http\Controllers\Admin\Operations\RentBoxOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -32,9 +35,13 @@ class RentalAssetCrudController extends CrudController
         CRUD::setModel(\App\Models\RentalAsset::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/rental-asset');
         CRUD::setEntityNameStrings('rental asset', 'rental assets');
+
+        //$generator_info = Generator::where('id', '>', 0)->get('name');
+        $generator_info = DB::table('generators')->get();
+        $this->data['generator_info'] = $generator_info;
+        
     }
 
-    
     /**
      * Define what happens when the List operation is loaded.
      * 
@@ -43,12 +50,18 @@ class RentalAssetCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setDefaultPageLength(15);
+        CRUD::setDefaultPageLength(100);
         CRUD::disablePersistentTable();
         CRUD::removeAllButtonsFromStack('top');
+        CRUD::removeButtons(['update', 'delete'], 'line');
         CRUD::setOperationSetting('lineButtonsAsDropdown', false);
 
-        CRUD::addButtonFromView('line', 'rentBox', 'rent-box', 'beginning');
+        CRUD::setAccessCondition('rentBox', function ($entry) {
+            return $entry->assetStatusType->status_type == 'Available' ? true : false;
+        });
+        CRUD::setAccessCondition('returnBox', function ($entry) {
+            return $entry->assetStatusType->status_type == "On Rent" ? true : false;
+        });
 
         CRUD::orderBy('displayed_num', 'asc');
 
@@ -376,8 +389,4 @@ class RentalAssetCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    public function rentBox() 
-    {
-        
-    }
 }
