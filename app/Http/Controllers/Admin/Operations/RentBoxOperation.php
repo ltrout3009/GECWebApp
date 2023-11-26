@@ -23,14 +23,14 @@ trait RentBoxOperation
      */
     protected function setupRentBoxRoutes($segment, $routeName, $controller)
     {
-        Route::get($segment.'/{id}/rentBox', [
-            'as'        => $routeName.'.rentBox',
+        Route::get($segment.'/{id}/rent-box', [
+            'as'        => $routeName.'.rent-box',
             'uses'      => $controller.'@rentBox',
             'operation' => 'rentBox',
         ]);
 
-        Route::post($segment.'/{id}/rentBox', [
-            'as'        => $routeName.'.rentBox-rent',
+        Route::post($segment.'/{id}/rent-box', [
+            'as'        => $routeName.'.rent-box-save',
             'uses'      => $controller.'@postRentBox',
             'operation' => 'rentBox',
         ]);
@@ -48,7 +48,7 @@ trait RentBoxOperation
         });
 
         CRUD::operation('list', function () {
-             CRUD::addButton('line', 'rent-box', 'view', 'crud::buttons.rent-box', 'end');
+             CRUD::addButton('line', 'rental-asset-buttons', 'view', 'crud::buttons.rental-asset-buttons', 'end');
         });
     }
 
@@ -72,7 +72,7 @@ trait RentBoxOperation
     }
 
     
-    public function postRentBox(Request $request){
+    public function postRentBox(Request $request) {
         /*
         $validator = Validator::make($request->all(), [
             'asset' => 'required',
@@ -89,6 +89,7 @@ trait RentBoxOperation
                 'on_rent_date'  => $request->input('rentdate'),
                 'delivery_order_num' => $request->input('delordernum'),
                 'on_rent_notes' => $request->input('message'),
+                'is_rental_complete' => '0'
             ]);
 
             $this->crud->getCurrentEntry()->status_id = '3';

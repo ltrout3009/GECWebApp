@@ -24,6 +24,7 @@ class RentalAssetCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
     use \App\Http\Controllers\Admin\Operations\RentBoxOperation;
+    use \App\Http\Controllers\Admin\Operations\ReturnBoxOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -197,6 +198,12 @@ class RentalAssetCrudController extends CrudController
             },
             'columns' => [
                 [
+                    'label' => 'Rental Complete',
+                    'closure' => function($entry){
+                        return $entry->is_rental_complete == 0 ? 'No' : 'Yes';
+                    },
+                ],
+                [
                     'label' => 'Generator #',
                     'closure' => function($entry){
                         return "{$entry->generator_id}";
@@ -242,9 +249,16 @@ class RentalAssetCrudController extends CrudController
                     }
                 ],
                 [
-                    'label' => 'Rental Notes',
+                    'label' => 'Delivery Notes',
                     'closure' => function($entry){
-                        return "{$entry->transaction_notes}";
+                        return "{$entry->on_rent_notes}";
+                    },
+                    'limit' => 100,
+                ],
+                [
+                    'label' => 'Pickup Notes',
+                    'closure' => function($entry){
+                        return "{$entry->off_rent_notes}";
                     },
                     'limit' => 100,
                 ],

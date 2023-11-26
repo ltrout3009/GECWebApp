@@ -130,6 +130,11 @@ class RentalAsset extends Model
         return $this->hasOne(RentalAssetTransaction::class)->latestOfMany();
     }
 
+    public function open_rental(): HasOne
+    {
+        return $this->hasOne(RentalAssetTransaction::class)->latestOfMany()->where('is_rental_complete', '0');
+    }
+
     public function rental_notes(): HasMany 
     {
         return $this->hasMany(RentalAssetNote::class);

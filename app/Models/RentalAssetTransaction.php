@@ -7,6 +7,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -30,6 +31,7 @@ class RentalAssetTransaction extends Model
         'pickup_order_num',
         'on_rent_notes',
         'off_rent_notes',
+        'is_rental_complete',
     ];
 
     /**
@@ -54,6 +56,11 @@ class RentalAssetTransaction extends Model
     public function generator(): BelongsTo
     {
         return $this->belongsTo(Generator::class);
+    }
+
+    public function transaction_events(): HasMany
+    {
+        return $this->hasMany(RentalAssetEvent::class);
     }
 
 }
