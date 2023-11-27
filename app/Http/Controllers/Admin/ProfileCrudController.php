@@ -52,20 +52,10 @@ class ProfileCrudController extends CrudController
         $this->crud->orderBy('number', 'asc');
 
         $this->crud->addColumns([
-
             [
-                'name' => 'generator_id',
-                'type' => 'integer',
-                'label' => 'Generator Number',
-                'wrapper' => [
-                    'style' => 'float:right',
-                ]
-            ],
-
-            [
-                'label'     => 'Generator Name', // Table column heading
+                'label'     => 'Generator', // Table column heading
                 'type'      => 'select',
-                'name'      => 'generator.name', // the column that contains the ID of that connected entity;
+                'name'      => 'generator.FullGenerator', // the column that contains the ID of that connected entity;
                 'limit'     => 255,
                 'orderable'  => true,
                 'orderLogic' => function ($query, $column, $columnDirection) {

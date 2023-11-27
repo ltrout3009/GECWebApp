@@ -18,6 +18,7 @@ class GeneratorCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \App\Http\Controllers\Admin\Operations\PriceListOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -45,10 +46,14 @@ class GeneratorCrudController extends CrudController
         CRUD::setDefaultPageLength(15);
         CRUD::disablePersistentTable();
         CRUD::removeAllButtonsFromStack('top');
-        CRUD::setOperationSetting('lineButtonsAsDropdown', true);
+        CRUD::setOperationSetting('lineButtonsAsDropdown', false);
+
+        CRUD::removeButtons(['update', 'delete'], 'line');
 
         CRUD::enableDetailsRow();
         CRUD::setDetailsRowView('vendor.backpack.crud.details_row.generator');
+
+        CRUD::hasAccess('priceList');
 
 
         $this->crud->addColumns([

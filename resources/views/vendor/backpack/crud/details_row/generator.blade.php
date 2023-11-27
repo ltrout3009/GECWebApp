@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/app.css">
 
-<div class="m-t-10 m-b-10 p-l-10 p-r-10 p-t-10 p-b-10">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col">
             <h3 class="text-decoration-underline">Mailing Address</h3>

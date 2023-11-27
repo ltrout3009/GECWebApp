@@ -51,7 +51,7 @@ class RentalAssetCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setDefaultPageLength(100);
+        CRUD::setDefaultPageLength(25);
         CRUD::disablePersistentTable();
         CRUD::removeAllButtonsFromStack('top');
         CRUD::removeButtons(['update', 'delete'], 'line');
