@@ -42,6 +42,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
     </script>
 
     <style>
+
         #washout_form, #repair_form, #notice_washout, #notice_repair {
             display: none;
             margin-top: 20px;
@@ -51,6 +52,15 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
         #release, #offrent {
             display: block;
         }
+
+        form label {
+            font-weight: 500;
+        }
+
+        form {
+            filter: drop-shadow(0 0.2rem 0.25rem rgba(0, 0, 0, 0.2));
+        }
+
     </style>
 @endsection
 
