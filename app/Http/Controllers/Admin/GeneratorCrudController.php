@@ -55,6 +55,8 @@ class GeneratorCrudController extends CrudController
 
         CRUD::hasAccess('priceList');
 
+        CRUD::orderBy('name','asc');
+
 
         $this->crud->addColumns([
             [

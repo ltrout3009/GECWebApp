@@ -139,19 +139,27 @@ class RentalAssetCrudController extends CrudController
 
     protected function setupShowOperation() 
     {
-        CRUD::removeAllButtons();
+        CRUD::removeButtons(['update', 'delete'], 'line');
 
-        //CRUD::setOperationSetting('tabsType', 'vertical');
+        CRUD::setAccessCondition('rentBox', function ($entry) {
+            return $entry->assetStatusType->status_type == 'Available' ? true : false;
+        });
+        CRUD::setAccessCondition('returnBox', function ($entry) {
+            return $entry->assetStatusType->status_type == "On Rent" ? true : false;
+        });
 
         // Title Widget
         Widget::add([
-            'type' => 'alert',
-            'class' => 'alert alert-dark mb-2',
-            'heading' => '<b> Asset: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->displayed_num . "<br> Status: " . RentalAsset::find(\Route::current()->parameter('id'))->assetStatusType->status_type ,
-            'content' => null,
-            'close_button' => false,
-            'wrapper' => ['class' => 'col-sm-6 col-md-4', 'style' => 'margin-bottom: 50px;',]
-           ])->to('before_content');
+            'type'=> 'card',
+            'content' => [
+                'header' => '<b>Asset: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->displayed_num,
+                'body' => '<b>Status: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->assetStatusType->status_type,
+            ],
+            'class' => 'card bg-info text-white',
+            'wrapper' => [
+                'style' => 'margin-bottom: 50px;'
+            ]
+        ])->to('before_content');
 
         // Details Tab
         CRUD::column('displayed_num')->label('Asset #')->type('text')->tab('Details');
@@ -206,13 +214,13 @@ class RentalAssetCrudController extends CrudController
                 [
                     'label' => 'Generator #',
                     'closure' => function($entry){
-                        return "{$entry->generator_id}";
+                        return $entry->generator_id;
                     }
                 ],
                 [
                     'label' => 'Generator Name',
                     'closure' => function($entry){
-                        return "{$entry->generator->name}";
+                        return $entry->generator->name;
                     }
                 ],
                 [

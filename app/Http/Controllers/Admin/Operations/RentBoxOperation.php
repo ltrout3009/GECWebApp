@@ -50,6 +50,10 @@ trait RentBoxOperation
         CRUD::operation('list', function () {
              CRUD::addButton('line', 'rental-asset-buttons', 'view', 'crud::buttons.rental-asset-buttons', 'end');
         });
+
+        CRUD::operation('show', function () {
+            CRUD::addButton('line', 'rental-asset-buttons', 'view', 'crud::buttons.rental-asset-buttons.');
+        });
     }
 
     /**
