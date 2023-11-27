@@ -32,6 +32,7 @@ class RentalAssetTransaction extends Model
         'on_rent_notes',
         'off_rent_notes',
         'is_rental_complete',
+        'return_date',
     ];
 
     /**

@@ -71,6 +71,13 @@ trait ReturnBoxOperation
     }
 
     public function postReturnBox(Request $request) {
+        /*
+        TODO - Need to setup logic :
+        1) If washout AND repair = No: Update rental_transactions (return, off_rent, release, order_num, notes, rental_complete = 1, status=available)
+        2) If washout AND repair = Yes: Update rental_transactions (return, order_num, notes, rental_complete = 0, status = waiting or requires action(s); rental_events (x2, washout and repair))
+        3) If washout OR repair = Yes: Update rental_transactions (return, order_num, notes, rental_complete = 0, status = waiting or requires action(s); rental_events (x1 washout or repair))
+        */
+
         try {
             $this->crud->getCurrentEntry()->rental_transactions()->where('id', $this->crud->getCurrentEntry()->open_rental->id)->update([
                 'off_rent_date' => $request->input('offrentdate'),

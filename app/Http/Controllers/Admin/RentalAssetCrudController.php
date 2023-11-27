@@ -40,6 +40,9 @@ class RentalAssetCrudController extends CrudController
         //$generator_info = Generator::where('id', '>', 0)->get('name');
         $generator_info = DB::table('generators')->get();
         $this->data['generator_info'] = $generator_info;
+
+        $event_type_info = DB::table('event_types')->get();
+        $this->data['event_type_info'] = $event_type_info;
         
     }
 
