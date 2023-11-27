@@ -181,6 +181,13 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                     </div>
+                                    <div class="form-group col-md-12">
+                                        <label>Washout Notes</label>
+                                        <textarea name="washoutnotes" class="form-control @error('washoutnotes') is invalid @enderror">{{ old('washoutnotes') }}</textarea>
+                                            @error('washoutnotes')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                    </div>
                                 </div>
                             </div>
 
@@ -188,7 +195,43 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                             <div class="card" id="repair_form">
                                 <div class="card-body row">
                                     <h2>Repair Form</h2>
-                                    <h4 style="color: orangered;">TODO: Repairs...</h4>
+                                    
+                                    <div class="form-group col-md-6">
+                                        <label>Event Type</label> <br>
+                                        <select name="eventtype2">
+                                        @foreach($event_type_info->where('event_type_name', 'Repair') as $event_type)
+                                            <option value="{{ $event_type->id }}"> {{ $event_type->event_type_name }} </option>
+                                        @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Required to release asset?</label><br>
+                                        <select name="repair">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Repair Order Number</label>
+                                        <input type="number" name="repairordernum" value="{{ old('repairordernum') }}" class="form-control @error('repairordernum') is invalid @enderror">
+                                            @error('repairordernum')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Due Date</label>
+                                        <input type="date" name="duedate2" value="{{ old('duedate2') }}" class="form-control @error('duedate2') is invalid @enderror">
+                                            @error('duedate2')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label>Repair Notes</label>
+                                        <textarea name="repairnotes" class="form-control @error('repairnotes') is invalid @enderror">{{ old('repairnotes') }}</textarea>
+                                            @error('repairnotes')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                    </div>
                                 </div>
                             </div>
 
