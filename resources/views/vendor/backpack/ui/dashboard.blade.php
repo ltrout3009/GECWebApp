@@ -1,5 +1,7 @@
 @extends(backpack_view('blank'))
 
+
+
 @php
     $widgets['before_content'][] = [
         'type'        => 'jumbotron',
@@ -9,3 +11,17 @@
         'button_text' => trans('backpack::base.logout'),
     ];
 @endphp
+
+
+
+@section('header')
+
+
+@endsection
+
+
+
+@section('content')
+
+
+@endsection
