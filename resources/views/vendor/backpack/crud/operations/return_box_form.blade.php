@@ -13,6 +13,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
 
 
 
+
 @section('header')
     <section class="container-fluid">
         <h2>
@@ -83,6 +84,8 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                     @csrf
                     <div class="card">
                         <div class="card-body row">
+                            
+                            <!-- PREVIOUS DATA FROM RENT BOX -->
                             <div class="form-group col-md-6">
                                 <label>Asset #</label>
                                 <input type="text" name="asset" value="{{ $entry->displayed_num }}" readonly disabled class="form-control @error('asset') is invalid @enderror">
@@ -121,6 +124,8 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                             <div class="form-group col-md-12">
                                 <hr>
                             </div>
+
+                            <!-- RETURN BOX -->
                             <div class="form-group col-md-6">
                                 <label>Return Date</label>
                                 <input type="date" name="returndate" value="{{ old('returndate') }}" class="form-control @error('returndate') is invalid @enderror">

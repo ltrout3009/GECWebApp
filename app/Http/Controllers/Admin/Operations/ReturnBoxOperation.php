@@ -81,16 +81,143 @@ trait ReturnBoxOperation
 
         $washout = $request->input('washout');
         $repair = $request->input('repair');
+        $today = date('Y-m-d');
 
         if ($washout == '0' && $repair == '0') {
-            //TODO box return ONLY logic
+            // box return ONLY logic
+            try {
+                // rental_asset_transaction
+                $this->crud->getCurrentEntry()->rental_transactions()->where('id', $this->crud->getCurrentEntry()->open_rental->id)->update([
+                    'return_date' => $request->input('returndate'),
+                    'off_rent_date' => $request->input('offrentdate'),
+                    'pickup_order_num' => $request->input('puordernum'),
+                    'off_rent_notes' => $request->input('punotes'),
+                    'is_rental_complete' => 1,
+                ]);
+                //rental_asset
+                $this->crud->getCurrentEntry()->status_id = 2;
+                $this->crud->getCurrentEntry()->save();
+
+                Alert::success('Asset: ' . $this->crud->getCurrentEntry()->displayed_num . ' returned successfully.')->flash();
+                return redirect(url($this->crud->route));
+            } catch (\Exception $e) {
+                Alert::error('Error: ' . $e->getMessage())->flash();
+
+                return redirect()->back()-withInput();
+            }
         } else if ($washout == '1' && $repair == '0') {
-            //TODO box return with washout logic
+            // box return with washout logic
+            try {
+                // rental_asset_transaction
+                $this->crud->getCurrentEntry()->rental_transactions()->where('id', $this->crud->getCurrentEntry()->open_rental->id)->update([
+                    'return_date' => $request->input('returndate'),
+                    'off_rent_date' => null,
+                    'pickup_order_num' => $request->input('puordernum'),
+                    'off_rent_notes' => $request->input('punotes'),
+                    'is_rental_complete' => 0,
+                ]);
+                //rental_asset_event - washout
+                $this->crud->getCurrentEntry()->rental_events()->create([
+                    'rental_asset_id' => $this->crud->getCurrentEntry()->id,
+                    'rental_asset_transaction_id' => $this->crud->getCurrentEntry()->open_rental->id,
+                    'event_type_id' => $request->input('eventtype'),
+                    'event_status_id' => 2,
+                    'created_date' => $today,
+                    'due_date' => $request->input('duedate'),
+                    'description' => $request->input('washoutnotes'),
+                ]);
+
+                //rental_asset
+                $this->crud->getCurrentEntry()->status_id = 6;
+                $this->crud->getCurrentEntry()->save();
+
+                Alert::success('Asset: ' . $this->crud->getCurrentEntry()->displayed_num . ' sent for washout successfully.')->flash();
+                return redirect(url($this->crud->route));
+            } catch (\Exception $e) {
+                Alert::error('Error: ' . $e->getMessage())->flash();
+
+                return redirect()->back()-withInput();
+            }
         } else if ($washout == '0' && $repair == '1') {
-            //TODO box return with repair logic
+            // box return with repair logic
+            try {
+                // rental_asset_transaction
+                $this->crud->getCurrentEntry()->rental_transactions()->where('id', $this->crud->getCurrentEntry()->open_rental->id)->update([
+                    'return_date' => $request->input('returndate'),
+                    'off_rent_date' => null,
+                    'pickup_order_num' => $request->input('puordernum'),
+                    'off_rent_notes' => $request->input('punotes'),
+                    'is_rental_complete' => 0,
+                ]);
+                //rental_asset_event - repair
+                $this->crud->getCurrentEntry()->rental_events()->create([
+                    'rental_asset_id' => $this->crud->getCurrentEntry()->id,
+                    'rental_asset_transaction_id' => $this->crud->getCurrentEntry()->open_rental->id,
+                    'event_type_id' => $request->input('eventtype2'),
+                    'event_status_id' => 2,
+                    'created_date' => $today,
+                    'due_date' => $request->input('duedate2'),
+                    'description' => $request->input('repairnotes'),
+                ]);
+
+                //rental_asset
+                $this->crud->getCurrentEntry()->status_id = 6;
+                $this->crud->getCurrentEntry()->save();
+
+                Alert::success('Asset: ' . $this->crud->getCurrentEntry()->displayed_num . ' sent for repair successfully.')->flash();
+                return redirect(url($this->crud->route));
+            } catch (\Exception $e) {
+                Alert::error('Error: ' . $e->getMessage())->flash();
+
+                return redirect()->back()-withInput();
+            }
         } else if ($washout == '1' && $repair == '1') {
-            //TODO box return with washout and repair logic
+            // box return with washout and repair logic
+            try {
+                // rental_asset_transaction
+                $this->crud->getCurrentEntry()->rental_transactions()->where('id', $this->crud->getCurrentEntry()->open_rental->id)->update([
+                    'return_date' => $request->input('returndate'),
+                    'off_rent_date' => null,
+                    'pickup_order_num' => $request->input('puordernum'),
+                    'off_rent_notes' => $request->input('punotes'),
+                    'is_rental_complete' => 0,
+                ]);
+                //rental_asset_event - washout
+                $this->crud->getCurrentEntry()->rental_events()->create([
+                    'rental_asset_id' => $this->crud->getCurrentEntry()->id,
+                    'rental_asset_transaction_id' => $this->crud->getCurrentEntry()->open_rental->id,
+                    'event_type_id' => $request->input('eventtype'),
+                    'event_status_id' => 2,
+                    'created_date' => $today,
+                    'due_date' => $request->input('duedate'),
+                    'description' => $request->input('washoutnotes'),
+                ]);
+                //rental_asset_event - repair
+                $this->crud->getCurrentEntry()->rental_events()->create([
+                    'rental_asset_id' => $this->crud->getCurrentEntry()->id,
+                    'rental_asset_transaction_id' => $this->crud->getCurrentEntry()->open_rental->id,
+                    'event_type_id' => $request->input('eventtype2'),
+                    'event_status_id' => 2,
+                    'created_date' => $today,
+                    'due_date' => $request->input('duedate2'),
+                    'description' => $request->input('repairnotes'),
+                ]);
+
+                //rental_asset
+                $this->crud->getCurrentEntry()->status_id = 6;
+                $this->crud->getCurrentEntry()->save();
+
+                Alert::success('Asset: ' . $this->crud->getCurrentEntry()->displayed_num . ' sent for repair successfully.')->flash();
+                return redirect(url($this->crud->route));
+            } catch (\Exception $e) {
+                Alert::error('Error: ' . $e->getMessage())->flash();
+
+                return redirect()->back()-withInput();
+            }
         }
+
+
+
 
         /* OLD Logic before washouts/repairs        
         try {
