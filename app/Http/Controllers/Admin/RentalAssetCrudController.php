@@ -57,6 +57,7 @@ class RentalAssetCrudController extends CrudController
         CRUD::setDefaultPageLength(25);
         CRUD::disablePersistentTable();
         CRUD::removeButtons(['update', 'delete'], 'line');
+        CRUD::removeButton('create');
         CRUD::setOperationSetting('lineButtonsAsDropdown', false);
 
         CRUD::setAccessCondition('washout', true);
