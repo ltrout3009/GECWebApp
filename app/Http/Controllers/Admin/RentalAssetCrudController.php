@@ -147,6 +147,11 @@ class RentalAssetCrudController extends CrudController
 
     protected function setupShowOperation() 
     {
+        CRUD::setAccessCondition('washout', true);
+        CRUD::addButtonFromView('line', 'add-washout-button', 'crud::buttons.add-washout-button', 'end');
+        CRUD::setAccessCondition('repair', true);
+        CRUD::addButtonFromView('line', 'add-repair-button', 'crud::buttons.add-repair-button', 'end');
+
         CRUD::removeButtons(['update', 'delete'], 'line');
 
         CRUD::setAccessCondition('rentBox', function ($entry) {
