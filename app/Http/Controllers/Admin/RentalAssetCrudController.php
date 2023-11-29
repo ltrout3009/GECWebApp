@@ -56,9 +56,13 @@ class RentalAssetCrudController extends CrudController
     {
         CRUD::setDefaultPageLength(25);
         CRUD::disablePersistentTable();
-        CRUD::removeAllButtonsFromStack('top');
         CRUD::removeButtons(['update', 'delete'], 'line');
         CRUD::setOperationSetting('lineButtonsAsDropdown', false);
+
+        CRUD::setAccessCondition('washout', true);
+        CRUD::addButtonFromView('top', 'add-washout-button', 'crud::buttons.add-washout-button', 'end');
+        CRUD::setAccessCondition('repair', true);
+        CRUD::addButtonFromView('top', 'add-repair-button', 'crud::buttons.add-repair-button', 'end');
 
         CRUD::setAccessCondition('rentBox', function ($entry) {
             return $entry->assetStatusType->status_type == 'Available' ? true : false;

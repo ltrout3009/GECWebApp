@@ -72,12 +72,6 @@ trait ReturnBoxOperation
 
     public function postReturnBox(Request $request)
     {
-        /*
-        TODO - Need to setup logic :
-        1) If washout AND repair = No: Update rental_transactions (return, off_rent, release, order_num, notes, rental_complete = 1, status=available)
-        2) If washout AND repair = Yes: Update rental_transactions (return, order_num, notes, rental_complete = 0, status = waiting or requires action(s); rental_events (x2, washout and repair))
-        3) If washout OR repair = Yes: Update rental_transactions (return, order_num, notes, rental_complete = 0, status = waiting or requires action(s); rental_events (x1 washout or repair))
-        */
 
         $washout = $request->input('washout');
         $repair = $request->input('repair');
@@ -215,29 +209,5 @@ trait ReturnBoxOperation
                 return redirect()->back()-withInput();
             }
         }
-
-
-
-
-        /* OLD Logic before washouts/repairs        
-        try {
-            $this->crud->getCurrentEntry()->rental_transactions()->where('id', $this->crud->getCurrentEntry()->open_rental->id)->update([
-                'off_rent_date' => $request->input('offrentdate'),
-                'pickup_order_num' => $request->input('puordernum'),
-                'off_rent_notes' => $request->input('punotes'),
-                'is_rental_complete' => 1,
-            ]);
-
-            $this->crud->getCurrentEntry()->status_id = 2;
-            $this->crud->getCurrentEntry()->save();
-
-            Alert::success(trans('backpack::crud.update_success'))->flash();
-            return redirect(url($this->crud->route));
-
-        } catch (\Exception $e) {
-            Alert::error("Error: " . $e->getMessage())->flash();
-
-            return redirect()->back()->withInput();
-        } */
     }
 }
