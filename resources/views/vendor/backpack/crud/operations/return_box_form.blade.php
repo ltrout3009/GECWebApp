@@ -151,7 +151,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Repairs Needed?</label><br>
-                                <select name="washout" onchange="showDiv('repair_form', this); showDiv('notice_repair', this); hideDiv('offrent', this); hideDiv('release', this);">
+                                <select name="repair" onchange="showDiv('repair_form', this); showDiv('notice_repair', this); hideDiv('offrent', this); hideDiv('release', this);">
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
@@ -172,7 +172,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Required to release asset?</label><br>
-                                        <select name="washout">
+                                        <select name="washout-release">
                                             <option value="0">No</option>
                                             <option value="1">Yes</option>
                                         </select>
@@ -216,7 +216,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Required to release asset?</label><br>
-                                        <select name="repair">
+                                        <select name="repair-release">
                                             <option value="0">No</option>
                                             <option value="1">Yes</option>
                                         </select>

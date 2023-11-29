@@ -18,15 +18,15 @@ trait ReturnBoxOperation
      */
     protected function setupReturnBoxRoutes($segment, $routeName, $controller)
     {
-        Route::get($segment.'/{id}/return-box', [
-            'as'        => $routeName.'.return-box',
-            'uses'      => $controller.'@returnBox',
+        Route::get($segment . '/{id}/return-box', [
+            'as'        => $routeName . '.return-box',
+            'uses'      => $controller . '@returnBox',
             'operation' => 'returnBox',
         ]);
 
-        Route::post($segment.'/{id}/return-box', [
-            'as'=> $routeName.'.return-box-save',
-            'uses'=> $controller.'@postReturnBox',
+        Route::post($segment . '/{id}/return-box', [
+            'as' => $routeName . '.return-box-save',
+            'uses' => $controller . '@postReturnBox',
             'operation' => 'returnBox',
         ]);
     }
@@ -43,7 +43,7 @@ trait ReturnBoxOperation
         });
 
         CRUD::operation('list', function () {
-             CRUD::addButton('line', 'rental-asset-buttons', 'view', 'crud::buttons.rental-asset-buttons', 'end');
+            CRUD::addButton('line', 'rental-asset-buttons', 'view', 'crud::buttons.rental-asset-buttons', 'end');
         });
 
         CRUD::operation('show', function () {
@@ -62,7 +62,7 @@ trait ReturnBoxOperation
 
         // prepare the fields you need to show
         $this->data['crud'] = $this->crud;
-        $this->data['title'] = $this->crud->getTitle() ?? 'Return Box '.$this->crud->entity_name;
+        $this->data['title'] = $this->crud->getTitle() ?? 'Return Box ' . $this->crud->entity_name;
         $this->data['entry'] = $this->crud->getCurrentEntry();
         $this->data['open_rental'] = $this->crud->getCurrentEntry()->open_rental();
 
@@ -70,7 +70,8 @@ trait ReturnBoxOperation
         return view('crud::operations.return_box_form', $this->data);
     }
 
-    public function postReturnBox(Request $request) {
+    public function postReturnBox(Request $request)
+    {
         /*
         TODO - Need to setup logic :
         1) If washout AND repair = No: Update rental_transactions (return, off_rent, release, order_num, notes, rental_complete = 1, status=available)
@@ -78,6 +79,20 @@ trait ReturnBoxOperation
         3) If washout OR repair = Yes: Update rental_transactions (return, order_num, notes, rental_complete = 0, status = waiting or requires action(s); rental_events (x1 washout or repair))
         */
 
+        $washout = $request->input('washout');
+        $repair = $request->input('repair');
+
+        if ($washout == '0' && $repair == '0') {
+            //TODO box return ONLY logic
+        } else if ($washout == '1' && $repair == '0') {
+            //TODO box return with washout logic
+        } else if ($washout == '0' && $repair == '1') {
+            //TODO box return with repair logic
+        } else if ($washout == '1' && $repair == '1') {
+            //TODO box return with washout and repair logic
+        }
+
+        /* OLD Logic before washouts/repairs        
         try {
             $this->crud->getCurrentEntry()->rental_transactions()->where('id', $this->crud->getCurrentEntry()->open_rental->id)->update([
                 'off_rent_date' => $request->input('offrentdate'),
@@ -96,6 +111,6 @@ trait ReturnBoxOperation
             Alert::error("Error: " . $e->getMessage())->flash();
 
             return redirect()->back()->withInput();
-        }
+        } */
     }
 }
