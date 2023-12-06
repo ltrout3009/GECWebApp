@@ -41,11 +41,21 @@
     <x-backpack::menu-dropdown-item title="Price List" icon="la la-file-invoice-dollar" />
 </x-backpack::menu-dropdown>
 
-<x-backpack::menu-dropdown title="Asset Tracking" icon="la la-search">
+<!-- <x-backpack::menu-dropdown title="Asset Tracking" icon="la la-search">
     <x-backpack::menu-dropdown-item title="Rentals" icon="la la-dumpster" :link="backpack_url('rental-asset')" />
     <x-backpack::menu-dropdown-item title="Powered" icon="la la-truck-moving" :link="backpack_url('power-asset')" />
     <x-backpack::menu-dropdown-item title="Non-Powered" icon="la la-truck-loading" :link="backpack_url('non-power-asset')" />
     <x-backpack::menu-dropdown-item title="Machinery & Equipment" icon="la la-tools" :link="backpack_url('machinery-equipment-asset')" />
+</x-backpack::menu-dropdown> -->
+
+
+{{-- ASSETS --}}
+<x-backpack::menu-separator title="Assets"  style="text-transform:uppercase" />
+
+<x-backpack::menu-dropdown title="Rentals" icon="la la-dumpster">
+    <x-backpack::menu-dropdown-item title="View" icon="la la-dumpster" :link="backpack_url('rental-asset')" />
+    <x-backpack::menu-dropdown-item title="Washouts" icon="la la-tint" :link="backpack_url('rental-asset-event')" /> <!-- //TODO - Change to be link that filters only for Washouts -->
+    <x-backpack::menu-dropdown-item title="Repairs" icon="la la-tools" :link="backpack_url('rental-asset-event')" /> <!-- //TODO - Change to be link that filters only for Repairs -->
 </x-backpack::menu-dropdown>
 
 

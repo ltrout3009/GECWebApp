@@ -56,6 +56,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                             </div>
+                            <!-- ADD SEARCH BOX -->
                             <div class="form-group col-md-12">
                                 <label>Generator</label> <br>
                                 <select name="generators">
