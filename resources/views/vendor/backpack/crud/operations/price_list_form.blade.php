@@ -64,42 +64,77 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
 
 
 @section('content')
+
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 mx-auto text-center mt-1 mb-4">
-                <h2>Select Profiles</h2>
-                <h3>{{$entry->FullGenerator}}</h3>
-                <h4>{{$entry->site_address}}, {{$entry->site_city}}, {{$entry->site_state}} {{$entry->site_zip}}</h4>
+
+        <!-- TABS -->
+
+        <div class="text-center mt-1 mb-5">
+            <div class="btn-group d-flex">
+                <button class="btn" onclick="openTab('Profiles')">Profiles</button>
+                <button class="btn" onclick="openTab('Containers')">Containers</button>
+                <button class="btn" onclick="openTab('Pricing')">Pricing</button>
             </div>
         </div>
-        <div class="row">
-            <button class="btn btn-danger" onclick="deleteRow();">REMOVE SELECTED</button>
+
+            <!-- TITLE -->
+        <div class="card">
+
+            <div class="card-body">
+
+                <h2 class="card-title">Select Profiles</h2>
+                <h4 class="card-subtitle">{{$entry->FullGenerator}}</h4>
+
+            <!-- BUTTONS -->
+                <div class="btn-toolbar">
+                    <div class="btn-group">
+
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-danger" onclick="deleteRow();">Remove Selected Rows</button>
+                    </div>
+                </div>
+
+            </div>
+                <!-- CONTENT - Profiles -->
+            <div class="card-body">
+
+                <div>
+                    <table class="table table-striped table-hover" id="profile_table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-center">Select</th>
+                                <th scope="col" class="text-end">Number</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Primary Disposal Facility</th>
+                                <th scope="col">Status</th>
+                                <th scope="col" class="text-center">Enterprise</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($entry->profiles as $profile)
+                                <tr>
+                                    <td class="hide text-center">
+                                        <input type="checkbox" class="select" id="checkbox_">
+                                    </td>
+                                    <td class="text-end">{{$profile->number}}</td>
+                                    <td>{{$profile->name}}</td>
+                                    <td>{{$profile->primaryFacility->facility->name ?? ''}}</td>
+                                    <td>{{$profile->profile_status}}</td>
+                                    <td class="text-center">{{$profile->enterprise->is_enterprise == 1 ? "Yes" : "No"}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            
+                <!-- CONTENT - Containers -->
+                <div>
+
+                </div>
+
+            </div>
         </div>
-        <table class="table table-striped table-hover" id="profile_table">
-            <thead>
-                <tr>
-                    <th scope="col">Select</th>
-                    <th scope="col" class="text-end">Number</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Primary Disposal Facility</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" class="text-center">Enterprise</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($entry->profiles as $profile)
-                    <tr>
-                        <td class="hide">
-                            <input type="checkbox" class="select" id="checkbox_">
-                        </td>
-                        <td class="text-end">{{$profile->number}}</td>
-                        <td>{{$profile->name}}</td>
-                        <td>{{$profile->primaryFacility->facility->name ?? ''}}</td>
-                        <td>{{$profile->profile_status}}</td>
-                        <td class="text-center">{{$profile->enterprise->is_enterprise == 1 ? "Yes" : "No"}}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
     </div>
+    
 @endsection
