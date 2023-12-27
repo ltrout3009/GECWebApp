@@ -37,6 +37,11 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
     </style>
 
     <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            getProfileData();
+        });
+
         function SelectProfiles() {
             var rows = document.querySelectorAll();
             var profileItems = [];
@@ -80,50 +85,47 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             evt.currentTarget.className += " tab-green";
         }
 
+        function getProfileData() {
+            var elem = document.getElementById("gen_number");
+            var gen_id = elem.getAttribute('data-gen-num');
 
-        function getProfileData(generator_id) {
+            console.log(gen_id); 
 
-            if (generator_id == 0) {
-                var html = '<td>No Profiles</td>';
-                document.getElementById("gen_profiles").innerHTML = html;
-            } else {
-                var ajax = new XMLHttpRequest();
-                ajax.open("GET", "profiles-data?generator_id=" + generator_id, true);
-                ajax.send();
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", "profiles-data?generator_id=" + gen_id, true);
+            ajax.send();
 
-                ajax.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        var response = JSON.parse(this.responseText);
-                        var html = '';
+            ajax.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    var html = '';
 
-                        for (var a = 0; a < response.length; a++) {
-                            html += "<tr id='" + response[a].id + "'>";
-                                html += "<td class='hide text-center'>";
-                                        html += "<input type='checkbox' class='select' id='" + response[a].id +"'>";
-                                        html += "</td>";
-                                html += "<td class='text-end'>" + response[a].number + "</td>";
-                                html += "<td>" + response[a].name + "</td>";
-                                html += "<td>" + response[a].primary_facility.facility.name + "</td>";
-                                html += "<td>" + response[a].profile_status + "</td>";
-                                html += "<td class='text-center'>" + response[a].enterprise.is_enterprise + "</td>";
-                            html += "</tr>";
-                        }
-                        
-                        document.getElementById("gen_profiles").innerHTML = html;
+                    for (var a = 0; a < response.length; a++) {
+                        html += "<tr id='" + response[a].id + "'>";
+                            html += "<td class='hide text-center'>";
+                                    html += "<input type='checkbox' class='select' id='" + response[a].id +"'>";
+                                    html += "</td>";
+                            html += "<td class='text-end'>" + response[a].number + "</td>";
+                            html += "<td>" + response[a].name + "</td>";
+                            html += "<td>" + response[a].primary_facility.facility.name + "</td>";
+                            html += "<td>" + response[a].profile_status + "</td>";
+                            html += "<td class='text-center'>" + response[a].enterprise.is_enterprise + "</td>";
+                        html += "</tr>";
                     }
-                };
+                    
+                    document.getElementById("gen_profiles").innerHTML = html;
+                }
             }
-
         }
-
     </script>
+    
 @endsection
 
 
 
 @section('content')
 
-    <div class="container-fluid">
+    <div class="container-fluid" data-gen-num="{{$entry->id}}" id="gen_number">
 
         <!-- TABS -->
 
@@ -155,7 +157,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             <div class="card-body">
 
                 <div>
-                    <table class="table table-striped table-hover" id="profile_table">
+                    <table class="table table-striped table-hover" id="container_table" style="">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center">Select</th>
@@ -166,19 +168,8 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                                 <th scope="col" class="text-center">Enterprise</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach($entry->profiles as $profile)
-                                <tr>
-                                    <td class="hide text-center">
-                                        <input type="checkbox" class="select" id="{{$profile->id}}">
-                                    </.>
-                                    <td class="text-end">{{$profile->number}}</td>
-                                    <td>{{$profile->name}}</td>
-                                    <td>{{$profile->primaryFacility->facility->name ?? ''}}</td>
-                                    <td>{{$profile->profile_status}}</td>
-                                    <td class="text-center">{{$profile->enterprise->is_enterprise == 1 ? "Yes" : "No"}}</td>
-                                </tr>
-                            @endforeach
+                        <tbody id="gen_profiles">
+                            <!-- AJAX Handled -->
                         </tbody>
                     </table>
                 </div>
@@ -197,7 +188,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             <!-- BUTTONS -->
                 <div class="btn-toolbar">
                     <div class="btn-group">
-                        <button class="btn btn-info" onclick="getProfileData({{$entry->id}});">Get Profiles</button>
+                        
                     </div>
                 </div>
 
@@ -206,21 +197,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             <div class="card-body">
 
                 <div>
-                    <table class="table table-striped table-hover" id="container_table" style="">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center">Select</th>
-                                <th scope="col" class="text-end">Number</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Primary Disposal Facility</th>
-                                <th scope="col">Status</th>
-                                <th scope="col" class="text-center">Enterprise</th>
-                            </tr>
-                        </thead>
-                        <tbody id="gen_profiles">
-                            <!-- AJAX Handled -->
-                        </tbody>
-                    </table>
+                    
                 </div>
             </div>
         </div>
