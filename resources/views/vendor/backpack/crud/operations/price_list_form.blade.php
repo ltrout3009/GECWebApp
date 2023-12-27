@@ -72,34 +72,36 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                 <h4>{{$entry->site_address}}, {{$entry->site_city}}, {{$entry->site_state}} {{$entry->site_zip}}</h4>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-4">
             <button class="btn btn-danger" onclick="deleteRow();">REMOVE SELECTED</button>
         </div>
-        <table class="table table-striped table-hover" id="profile_table">
-            <thead>
-                <tr>
-                    <th scope="col">Select</th>
-                    <th scope="col" class="text-end">Number</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Primary Disposal Facility</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" class="text-center">Enterprise</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($entry->profiles as $profile)
+        <div class="{{ backpack_theme_config('classes.tableWrapper') }}">
+            <table class="{{ backpack_theme_config('classes.table') ?? 'table table-striped table-hover nowrap rounded card-table table-vcenter card d-table shadow-xs border-xs dataTable' }}" id="crudTable">
+                <thead>
                     <tr>
-                        <td class="hide">
-                            <input type="checkbox" class="select" id="checkbox_">
-                        </td>
-                        <td class="text-end">{{$profile->number}}</td>
-                        <td>{{$profile->name}}</td>
-                        <td>{{$profile->primaryFacility->facility->name ?? ''}}</td>
-                        <td>{{$profile->profile_status}}</td>
-                        <td class="text-center">{{$profile->enterprise->is_enterprise == 1 ? "Yes" : "No"}}</td>
+                        <th scope="col">Select</th>
+                        <th scope="col" class="text-end">Number</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Primary Disposal Facility</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-center">Enterprise</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($entry->profiles as $profile)
+                        <tr>
+                            <td class="hide">
+                                <input type="checkbox" class="select" id="checkbox_">
+                            </td>
+                            <td class="text-end">{{$profile->number}}</td>
+                            <td>{{$profile->name}}</td>
+                            <td>{{$profile->primaryFacility->facility->name ?? ''}}</td>
+                            <td>{{$profile->profile_status}}</td>
+                            <td class="text-center">{{$profile->enterprise->is_enterprise == 1 ? "Yes" : "No"}}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 @endsection

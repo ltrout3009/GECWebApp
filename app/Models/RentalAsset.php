@@ -145,5 +145,11 @@ class RentalAsset extends Model
         return $this->hasMany(RentalAssetEvent::class);
     }
 
+    public function scopeAvailable($query)
+    {
+        $available_id = AssetStatusType::where('status_type', 'Available')->where('asset_type_id', '1')->select('id');
+
+        return $query->where('status_id', $available_id);
+    }
 
 }

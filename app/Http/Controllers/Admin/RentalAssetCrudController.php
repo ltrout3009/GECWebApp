@@ -37,13 +37,11 @@ class RentalAssetCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/rental-asset');
         CRUD::setEntityNameStrings('rental asset', 'rental assets');
 
-        //$generator_info = Generator::where('id', '>', 0)->get('name');
         $generator_info = DB::table('generators')->get();
         $this->data['generator_info'] = $generator_info;
 
         $event_type_info = DB::table('event_types')->get();
         $this->data['event_type_info'] = $event_type_info;
-        
     }
 
     /**
@@ -60,11 +58,13 @@ class RentalAssetCrudController extends CrudController
         CRUD::removeButton('create');
         CRUD::setOperationSetting('lineButtonsAsDropdown', false);
 
+/*         // TOP BUTTONS
         CRUD::setAccessCondition('washout', true);
         CRUD::addButtonFromView('top', 'add-washout-button', 'crud::buttons.add-washout-button', 'end');
         CRUD::setAccessCondition('repair', true);
-        CRUD::addButtonFromView('top', 'add-repair-button', 'crud::buttons.add-repair-button', 'end');
-
+        CRUD::addButtonFromView('top', 'add-repair-button', 'crud::buttons.add-repair-button', 'end'); */
+        
+        // LINE BUTTONS
         CRUD::setAccessCondition('rentBox', function ($entry) {
             return $entry->assetStatusType->status_type == 'Available' ? true : false;
         });
@@ -72,29 +72,58 @@ class RentalAssetCrudController extends CrudController
             return $entry->assetStatusType->status_type == "On Rent" ? true : false;
         });
 
+
+        CRUD::addFilter(
+            [
+                'type'  => 'simple',
+                'name'  => 'available',
+                'label' => 'Available',
+            ],
+            false,
+            function () {
+                CRUD::addClause('available');
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'type'  => 'select2',
+                'name'  => 'displayed_num',
+                'label' => 'Asset Number',
+            ],
+            function () {
+                return \App\Models\RentalAsset::all()->keyBy('id')->pluck('displayed_num', 'id')->toArray();
+            },
+            function ($value) {
+                $this->crud->addClause('where', 'id', $value);
+            }
+        );
+
+
+
         CRUD::orderBy('displayed_num', 'asc');
 
-        CRUD::addColumns ([
+        CRUD::addColumns([
 
             [
-                'label' => 'Status',
-                'type' => 'text',
-                'name' => 'assetStatusType.status_type',
+                'label'      => 'Status',
+                'type'       => 'text',
+                'name'       => 'assetStatusType.status_type',
                 'orderable'  => true,
                 'orderLogic' => function ($query, $column, $columnDirection) {
-                        return $query->leftJoin('asset_status_types', 'rental_assets.status_id', '=', 'asset_status_types.id')
-                                     ->orderBy('asset_status_types.status_type', $columnDirection)->select('rental_assets.*');
-                    },
+                    return $query->leftJoin('asset_status_types', 'rental_assets.status_id', '=', 'asset_status_types.id')
+                        ->orderBy('asset_status_types.status_type', $columnDirection)->select('rental_assets.*');
+                },
                 'wrapper' => [
                     'element' => 'span',
                     'class'   => function ($crud, $column, $entry, $related_key) {
-                        if ($column['text'] == 'Available') {
+                        if ($column['text']       == 'Available') {
                             return 'badge rounded-pill bg-success';
                         } elseif ($column['text'] == 'On Rent') {
                             return 'badge rounded-pill bg-danger';
                         } elseif ($column['text'] == 'Retired') {
                             return 'badge rounded-pill bg-info';
-                        } 
+                        }
                         return 'badge rounded-pill bg-warning';
                     },
                 ],
@@ -102,50 +131,56 @@ class RentalAssetCrudController extends CrudController
 
             [
                 'label' => 'Asset #',
-                'type' => 'text',
-                'name' => 'displayed_num',
+                'type'  => 'text',
+                'name'  => 'acumatica_asset_id'
+            ],
+
+            [
+                'label' => 'Displayed #',
+                'type'  => 'text',
+                'name'  => 'displayed_num',
             ],
 
             [
                 'label' => 'Old #',
-                'type' => 'text',
-                'name' => 'old_num',
+                'type'  => 'text',
+                'name'  => 'old_num',
             ],
 
             [
                 'label' => 'Type',
-                'type' => 'select',
-                'name' => 'assetClass',
+                'type'  => 'select',
+                'name'  => 'assetClass',
             ],
 
             [
                 'label' => 'Capacity',
-                'type' => 'integer',
-                'name' => 'capacity',
+                'type'  => 'integer',
+                'name'  => 'capacity',
             ],
 
             [
                 'label' => 'Unit',
-                'type' => 'text',
-                'name' => 'capacity_unit',
+                'type'  => 'text',
+                'name'  => 'capacity_unit',
             ],
 
             [
                 'label' => 'Serial #',
-                'type' => 'text',
-                'name' => 'serial_vin_num',
+                'type'  => 'text',
+                'name'  => 'serial_vin_num',
             ],
 
             [
                 'label' => 'Property Type',
-                'type' => 'select',
-                'name' => 'propertyType',
+                'type'  => 'select',
+                'name'  => 'propertyType',
             ],
 
         ]);
     }
 
-    protected function setupShowOperation() 
+    protected function setupShowOperation()
     {
         CRUD::setAccessCondition('washout', true);
         CRUD::addButtonFromView('line', 'add-washout-button', 'crud::buttons.add-washout-button', 'end');
@@ -163,12 +198,12 @@ class RentalAssetCrudController extends CrudController
 
         // Title Widget
         Widget::add([
-            'type'=> 'card',
+            'type'    => 'card',
             'content' => [
-                'header' => '<b>Asset: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->displayed_num,
-                'body' => '<b>Status: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->assetStatusType->status_type,
+                'header' => '<b>Asset:  </b>' . RentalAsset::find(\Route::current()->parameter('id'))->displayed_num,
+                'body'   => '<b>Status: </b>' . RentalAsset::find(\Route::current()->parameter('id'))->assetStatusType->status_type,
             ],
-            'class' => 'card bg-info text-white',
+            'class'   => 'card bg-info text-white',
             'wrapper' => [
                 'style' => 'margin-bottom: 50px;'
             ]
@@ -196,89 +231,89 @@ class RentalAssetCrudController extends CrudController
 
         // margin widget
         Widget::add([
-            'type' => 'div',
+            'type'  => 'div',
             'class' => 'row',
             'style' => 'margin-bottom: 50px',
         ])->to('after_content');
 
         // Rental History
         Widget::add([
-            'type' => 'relation_table',
-            'name' => 'rental_transactions',
-            'label' => 'Rental History',
-            'backpack_crud' => 'rentalassettransaction',
+            'type'               => 'relation_table',
+            'name'               => 'rental_transactions',
+            'label'              => 'Rental  History',
+            'backpack_crud'      => 'rentalassettransaction',
             'relation_attribute' => 'id',
-            'button_create' => false,
-            'button_delete' => true,
-            'button_edit' => true,
-            'button_show' => false,
-            'buttons' => true,
-            'search' => true,
-            'visible' => function($entry){
+            'button_create'      => false,
+            'button_delete'      => true,
+            'button_edit'        => true,
+            'button_show'        => false,
+            'buttons'            => true,
+            'search'             => true,
+            'visible'            => function ($entry) {
                 return $entry->rental_transactions->count() > 0;
             },
             'columns' => [
                 [
-                    'label' => 'Rental Complete',
-                    'closure' => function($entry){
+                    'label'   => 'Rental  Complete',
+                    'closure' => function ($entry) {
                         return $entry->is_rental_complete == 0 ? 'No' : 'Yes';
                     },
                 ],
                 [
-                    'label' => 'Generator #',
-                    'closure' => function($entry){
+                    'label'   => 'Generator #',
+                    'closure' => function   ($entry) {
                         return $entry->generator_id;
                     }
                 ],
                 [
-                    'label' => 'Generator Name',
-                    'closure' => function($entry){
+                    'label'   => 'Generator Name',
+                    'closure' => function   ($entry) {
                         return $entry->generator->name;
                     }
                 ],
                 [
-                    'label' => 'On Rent Date',
-                    'closure' => function($entry){
+                    'label'   => 'On      Rent Date',
+                    'closure' => function ($entry) {
                         //return date_format($entry->on_rent_date, 'n/j/Y');
                         return $entry->on_rent_date;
                     }
                 ],
                 [
-                    'label' => 'Off Rent Date',
-                    'closure' => function($entry){
+                    'label'   => 'Off     Rent Date',
+                    'closure' => function ($entry) {
                         //return date_format($entry->off_rent_date, 'n/j/Y');
                         return $entry->off_rent_date;
                     }
                 ],
                 [
-                    'label' => 'Release Date',
-                    'closure' => function($entry){
+                    'label'   => 'Release Date',
+                    'closure' => function ($entry) {
                         //return date_format($entry->release_date, 'n/j/Y');
                         return $entry->release_date;
                     }
                 ],
                 [
-                    'label' => 'Delivery Order #',
-                    'closure' => function($entry){
+                    'label'   => 'Delivery Order #',
+                    'closure' => function  ($entry) {
                         return "{$entry->delivery_order_num}";
                     }
                 ],
                 [
-                    'label' => 'Pickup Order #',
-                    'closure' => function($entry){
+                    'label'   => 'Pickup  Order #',
+                    'closure' => function ($entry) {
                         return "{$entry->pickup_order_num}";
                     }
                 ],
                 [
-                    'label' => 'Delivery Notes',
-                    'closure' => function($entry){
+                    'label'   => 'Delivery Notes',
+                    'closure' => function  ($entry) {
                         return "{$entry->on_rent_notes}";
                     },
                     'limit' => 100,
                 ],
                 [
-                    'label' => 'Pickup Notes',
-                    'closure' => function($entry){
+                    'label'   => 'Pickup  Notes',
+                    'closure' => function ($entry) {
                         return "{$entry->off_rent_notes}";
                     },
                     'limit' => 100,
@@ -289,37 +324,37 @@ class RentalAssetCrudController extends CrudController
 
         // margin widget
         Widget::add([
-            'type' => 'div',
+            'type'  => 'div',
             'class' => 'row',
             'style' => 'margin-bottom: 50px',
         ])->to('after_content');
 
         // Notes
         Widget::add([
-            'type' => 'relation_table',
-            'name' => 'rental_notes',
-            'label' => 'Asset Notes',
-            'backpack_crud' => 'rentalassetnotes',
+            'type'               => 'relation_table',
+            'name'               => 'rental_notes',
+            'label'              => 'Asset   Notes',
+            'backpack_crud'      => 'rentalassetnotes',
             'relation_attribute' => 'id',
-            'button_create' => false,
-            'button_delete' => true,
-            'button_edit' => true,
-            'button_show' => false,
-            'buttons' => true,
-            'search' => true,
-            'visible' => function($entry){
+            'button_create'      => false,
+            'button_delete'      => true,
+            'button_edit'        => true,
+            'button_show'        => false,
+            'buttons'            => true,
+            'search'             => true,
+            'visible'            => function ($entry) {
                 return $entry->rental_notes->count() > 0;
             },
             'columns' => [
                 [
-                    'label' => 'Date',
-                    'closure' => function($entry){
+                    'label'   => 'Date',
+                    'closure' => function ($entry) {
                         return date_format($entry->note_date, 'n/j/Y');
                     }
                 ],
                 [
-                    'label' => 'Note',
-                    'closure' => function($entry){
+                    'label'   => 'Note',
+                    'closure' => function ($entry) {
                         return "{$entry->note}";
                     }
                 ],
@@ -328,70 +363,70 @@ class RentalAssetCrudController extends CrudController
 
         // margin widget
         Widget::add([
-            'type' => 'div',
+            'type'  => 'div',
             'class' => 'row',
             'style' => 'margin-bottom: 50px',
         ])->to('after_content');
 
         // Events
         Widget::add([
-            'type' => 'relation_table',
-            'name' => 'rental_events',
-            'label' => 'Rental Events',
-            'backpack_crud' => 'rentalassetevents',
+            'type'               => 'relation_table',
+            'name'               => 'rental_events',
+            'label'              => 'Rental  Events',
+            'backpack_crud'      => 'rentalassetevents',
             'relation_attribute' => 'id',
-            'button_create' => false,
-            'button_delete' => true,
-            'button_edit' => true,
-            'button_show' => false,
-            'buttons' => true,
-            'search' => true,
-            'visible' => function($entry){
+            'button_create'      => false,
+            'button_delete'      => true,
+            'button_edit'        => true,
+            'button_show'        => false,
+            'buttons'            => true,
+            'search'             => true,
+            'visible'            => function ($entry) {
                 return $entry->rental_events->count() >= 0;
             },
             'columns' => [
                 [
-                    'label' => 'Event Type',
-                    'closure' => function($entry){
+                    'label'   => 'Event   Type',
+                    'closure' => function ($entry) {
                         return "{$entry->eventType->event_type_name}";
                     }
                 ],
                 [
-                    'label' => 'Status',
-                    'closure' => function($entry){
+                    'label'   => 'Status',
+                    'closure' => function ($entry) {
                         return "{$entry->eventStatusType->status_type_name}";
                     }
                 ],
                 [
-                    'label' => 'Created Date',
-                    'closure' => function($entry){
+                    'label'   => 'Created Date',
+                    'closure' => function ($entry) {
                         return "{$entry->created_date}";
                     }
                 ],
                 [
-                    'label' => 'Due Date',
-                    'closure' => function($entry){
+                    'label'   => 'Due     Date',
+                    'closure' => function ($entry) {
                         return "{$entry->due_date}";
                     }
                 ],
                 [
-                    'label' => 'Start Date',
-                    'closure' => function($entry){
+                    'label'   => 'Start   Date',
+                    'closure' => function ($entry) {
                         return "{$entry->start_date}";
                     }
                 ],
                 [
-                    'label' => 'Completed Date',
-                    'closure' => function($entry){
+                    'label'   => 'Completed Date',
+                    'closure' => function   ($entry) {
                         return "{$entry->completed_date}";
                     }
                 ],
                 [
-                    'label' => 'Cost',
-                    'closure' => function($entry){
+                    'label'   => 'Cost',
+                    'closure' => function ($entry) {
                         return "{$entry->cost}";
                     }
-                ],                
+                ],
             ],
         ])->to('after_content');
     }
@@ -423,5 +458,4 @@ class RentalAssetCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
-
 }
