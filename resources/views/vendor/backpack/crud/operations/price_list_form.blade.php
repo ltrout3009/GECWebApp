@@ -42,15 +42,6 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             getProfileData();
         });
 
-        function SelectProfiles() {
-            var rows = document.querySelectorAll();
-            var profileItems = [];
-
-            for (var i = 0; i < rows.length; i++) {
-                var elm = rows[i].querySelector('input[type="checkbox"].select').id;
-            }
-        }
-
         function selectProfiles(){
 
             if(document.querySelectorAll('input[type="checkbox"]:checked').length == 0) {
@@ -89,8 +80,6 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             var elem = document.getElementById("gen_number");
             var gen_id = elem.getAttribute('data-gen-num');
 
-            console.log(gen_id); 
-
             var ajax = new XMLHttpRequest();
             ajax.open("GET", "profiles-data?generator_id=" + gen_id, true);
             ajax.send();
@@ -117,8 +106,20 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                 }
             }
         }
+
+        function getProfileContainers() {
+            // TODO: Need to create a function like getProfileData to pull containers based on selected profiles. 
+
+            /* Ideas:
+                1) selectProfiles adds all prof_ids to an array. 
+                2) this function takes an array as an attribute.
+                3) selectProfiles calls this function with the prof_ids array
+                4) this function loads ajax method to get containers based on prof_ids.
+            */
+        }
+
     </script>
-    
+
 @endsection
 
 
