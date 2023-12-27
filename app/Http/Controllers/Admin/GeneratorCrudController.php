@@ -147,7 +147,7 @@ class GeneratorCrudController extends CrudController
             $gen_id = "0";
         }
 
-        $data = Profile::where('generator_id', $gen_id)->get();
+        $data = Profile::where('generator_id', $gen_id)->with('pricings')->with('enterprise')->with('primaryFacility.facility')->get();
 
         echo json_encode($data);
     }

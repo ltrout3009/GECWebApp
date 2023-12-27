@@ -94,15 +94,21 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                 ajax.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         var response = JSON.parse(this.responseText);
-                        var html = '<td>loading</td>';
+                        var html = '';
 
                         for (var a = 0; a < response.length; a++) {
-                            html += "<td>" + response[a].number + "</td>";
-                            html += "<td>" + response[a].name + "</td>";
-                            html += "<td>" + response[a].facility_id + "</td>";
-                            html += "<td>" + response[a].profile_status + "</td>";
-                            html += "<td>0</td>";
+                            html += "<tr id='" + response[a].id + "'>";
+                                html += "<td class='hide text-center'>";
+                                        html += "<input type='checkbox' class='select' id='" + response[a].id +"'>";
+                                        html += "</td>";
+                                html += "<td class='text-end'>" + response[a].number + "</td>";
+                                html += "<td>" + response[a].name + "</td>";
+                                html += "<td>" + response[a].primary_facility.facility.name + "</td>";
+                                html += "<td>" + response[a].profile_status + "</td>";
+                                html += "<td class='text-center'>" + response[a].enterprise.is_enterprise + "</td>";
+                            html += "</tr>";
                         }
+                        
                         document.getElementById("gen_profiles").innerHTML = html;
                     }
                 };
