@@ -6,6 +6,8 @@ use App\Http\Requests\GeneratorRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
+use App\Models\Profile;
+
 /**
  * Class GeneratorCrudController
  * @package App\Http\Controllers\Admin
@@ -135,5 +137,18 @@ class GeneratorCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function getProfiles()
+    {
+        if(isset($_GET['generator_id'])) {
+            $gen_id = $_GET['generator_id'];
+        } else {
+            $gen_id = "0";
+        }
+
+        $data = Profile::where('generator_id', $gen_id)->get();
+
+        echo json_encode($data);
     }
 }

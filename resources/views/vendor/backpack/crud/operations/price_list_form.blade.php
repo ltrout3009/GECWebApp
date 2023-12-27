@@ -80,6 +80,36 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             evt.currentTarget.className += " tab-green";
         }
 
+
+        function getProfileData(generator_id) {
+
+            if (generator_id == 0) {
+                var html = '<td>No Profiles</td>';
+                document.getElementById("gen_profiles").innerHTML = html;
+            } else {
+                var ajax = new XMLHttpRequest();
+                ajax.open("GET", "profiles-data?generator_id=" + generator_id, true);
+                ajax.send();
+
+                ajax.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        var html = '<td>loading</td>';
+
+                        for (var a = 0; a < response.length; a++) {
+                            html += "<td>" + response[a].number + "</td>";
+                            html += "<td>" + response[a].name + "</td>";
+                            html += "<td>" + response[a].facility_id + "</td>";
+                            html += "<td>" + response[a].profile_status + "</td>";
+                            html += "<td>0</td>";
+                        }
+                        document.getElementById("gen_profiles").innerHTML = html;
+                    }
+                };
+            }
+
+        }
+
     </script>
 @endsection
 
@@ -135,7 +165,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                                 <tr>
                                     <td class="hide text-center">
                                         <input type="checkbox" class="select" id="{{$profile->id}}">
-                                    </td>
+                                    </.>
                                     <td class="text-end">{{$profile->number}}</td>
                                     <td>{{$profile->name}}</td>
                                     <td>{{$profile->primaryFacility->facility->name ?? ''}}</td>
@@ -161,7 +191,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             <!-- BUTTONS -->
                 <div class="btn-toolbar">
                     <div class="btn-group">
-
+                        <button class="btn btn-info" onclick="getProfileData({{$entry->id}});">Get Profiles</button>
                     </div>
                 </div>
 
@@ -170,7 +200,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             <div class="card-body">
 
                 <div>
-                    <table class="table table-striped table-hover" id="container_table" style="background-color:green">
+                    <table class="table table-striped table-hover" id="container_table" style="">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center">Select</th>
@@ -181,19 +211,8 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                                 <th scope="col" class="text-center">Enterprise</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach($entry->profiles as $profile)
-                                <tr>
-                                    <td class="hide text-center">
-                                        <input type="checkbox" class="select" id="checkbox_">
-                                    </td>
-                                    <td class="text-end">{{$profile->number}}</td>
-                                    <td>{{$profile->name}}</td>
-                                    <td>{{$profile->primaryFacility->facility->name ?? ''}}</td>
-                                    <td>{{$profile->profile_status}}</td>
-                                    <td class="text-center">{{$profile->enterprise->is_enterprise == 1 ? "Yes" : "No"}}</td>
-                                </tr>
-                            @endforeach
+                        <tbody id="gen_profiles">
+                            <!-- AJAX Handled -->
                         </tbody>
                     </table>
                 </div>
