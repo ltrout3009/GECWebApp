@@ -19,7 +19,9 @@ class Approval extends Model
 
     public function facility(): BelongsTo
     {
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Facility::class)->withDefault([
+            'name' => '-',
+        ]);
     }
 
     public function profile(): BelongsTo

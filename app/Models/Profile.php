@@ -40,7 +40,9 @@ class Profile extends Model
 
     public function primaryFacility(): HasOne
     {
-        return $this->hasOne(Approval::class)->ofMany('facility_id')->where('is_primary_facility', 1);
+        return $this->hasOne(Approval::class)->ofMany('facility_id')->where('is_primary_facility', 1)->withDefault(function (Approval $approval) {
+                $approval->facility->name = '-';
+            });
     }
 
     protected static function boot()
