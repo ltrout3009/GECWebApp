@@ -116,10 +116,11 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
         function getProfileContainers(profile_ids) {
             var prof_ids = [];
             prof_ids.push(profile_ids);
+            
             /*
             for (var a = 0; a < prof_ids.length; a++) {
                 var ajax = new XMLHttpRequest();
-                ajax.open("GET", "pricing-data?profile_id=[" + prof_ids[a] + "]", true);
+                ajax.open("GET", "pricing-data?profile_id=[" + prof_ids + "]", true);
                 ajax.send();
 
                 ajax.onreadystatechange = function () {
@@ -148,7 +149,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                 }
             }
             */
-
+            
             var ajax = new XMLHttpRequest();
                 ajax.open("GET", "pricing-data?profile_id=[" + prof_ids + "]", true);
                 ajax.send();
@@ -177,7 +178,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                         document.getElementById("gen_containers").innerHTML = html;
                     }
                 }
-
+                
             
         }
 

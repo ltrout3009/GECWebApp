@@ -172,7 +172,7 @@ class GeneratorCrudController extends CrudController
 
     public function getPricing() 
     {        
-        $profiles = json_decode($_GET['profile_id']);
+        $profiles = json_decode($_GET['profile_id'], true);
 
         //TODO: CANNOT PARSE. No EOF or , between different profiles. Probably bc of loop?
 
@@ -189,6 +189,8 @@ class GeneratorCrudController extends CrudController
     
                 echo json_encode('if(isset) == false currently.');
             }
+
+            
         }
     }
 }
