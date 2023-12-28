@@ -64,4 +64,5 @@ Route::group([
     Route::crud('user', 'UserCrudController');
 
     Route::get('generator/{id}/profiles-data', 'GeneratorCrudController@getProfiles');
+    Route::get('generator/{id}/pricing-data', 'GeneratorCrudController@getPricing');
 }); // this should be the absolute last line of this file

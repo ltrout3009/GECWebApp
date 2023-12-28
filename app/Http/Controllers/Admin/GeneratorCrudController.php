@@ -7,6 +7,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 use App\Models\Profile;
+use App\Models\Pricing;
 
 /**
  * Class GeneratorCrudController
@@ -150,5 +151,42 @@ class GeneratorCrudController extends CrudController
         $data = Profile::where('generator_id', $gen_id)->with('pricings')->with('enterprise')->with('primaryFacility.facility')->get();
 
         echo json_encode($data);
+    }
+
+    public function getPricing_old() 
+    {
+        if(isset($_GET['profile_id'])) {
+            $get_array = array($_GET['profile_id']);
+
+            foreach($get_array as $get) {
+                $prof_id = $get;
+            } 
+        } else {
+            $prof_id = 0;
+        }
+
+        $data = Pricing::where('profile_id', $prof_id)->with('profile')->with('waste')->with('waste.container')->with('waste.facility')->with('base')->get();
+
+        echo json_encode($data);
+    }
+
+    public function getPricing() 
+    {
+        $get_array = array($_GET['profile_id']);
+
+        foreach ($get_array as $get) {
+            if(isset($_GET[$get])) {                
+                $prof_id = $_GET[$get];
+
+                $data = Pricing::where('profile_id', $prof_id)->with('profile')->with('waste')->with('waste.container')->with('waste.facility')->with('base')->get();
+
+                echo json_encode($data);
+
+            } else {
+                $prof_id = 0;
+
+                echo json_encode('if(isset) == false currently.');
+            }
+        }
     }
 }

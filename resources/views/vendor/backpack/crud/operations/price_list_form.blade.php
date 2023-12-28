@@ -44,6 +44,8 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
 
         function selectProfiles(){
 
+            var profile_ids = [];
+
             if(document.querySelectorAll('input[type="checkbox"]:checked').length == 0) {
                 new Noty({
                     type: "warning",
@@ -54,11 +56,15 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                 document.querySelectorAll('input[type="checkbox"]:checked').forEach(e => {
                     var prof_id = e.getAttribute("id");
 
+                    profile_ids.push(prof_id);
+
                     new Noty({
                     type: "success",
                     text: "<strong>Success!</strong><br>Profile ID: " + prof_id
                     }).show();
                 });
+
+                getProfileContainers(profile_ids);
             }
         }
 
@@ -107,15 +113,42 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             }
         }
 
-        function getProfileContainers() {
-            // TODO: Need to create a function like getProfileData to pull containers based on selected profiles. 
+        function getProfileContainers(profile_ids) {
+            var prof_ids = [];
+            prof_ids.push(profile_ids);
+            
+            /* for (var a = 0; a < prof_ids.length; a++) {
+                
+            } */
 
-            /* Ideas:
-                1) selectProfiles adds all prof_ids to an array. 
-                2) this function takes an array as an attribute.
-                3) selectProfiles calls this function with the prof_ids array
-                4) this function loads ajax method to get containers based on prof_ids.
-            */
+            var ajax = new XMLHttpRequest();
+                ajax.open("GET", "pricing-data?profile_id=" + prof_ids, true);
+                ajax.send();
+
+                ajax.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        var html = '';
+
+                        for (var b = 0; b < response.length; b++) {
+                            html += "<tr id='" + response[b].id + "'>";
+                                html += "<td class='hide text-center'>";
+                                        html += "<input type='checkbox' class='select' id='" + response[b].id +"'>";
+                                        html += "</td>";
+                                html += "<td class='text-end'>" + response[b].profile.number + "</td>";
+                                html += "<td>" + response[b].profile.name + "</td>";
+                                html += "<td>" + response[b].waste.facility.name + "</td>";
+                                html += "<td>" + "0" + "</td>";
+                                html += "<td class='text-center'>" + response[b].waste.container.category + "</td>";
+                                html += "<td class='text-end'>" + response[b].waste.container.size + "</td>";
+                                html += "<td class='text-end'>" + response[b].waste.wpc_id + "</td>";
+                                html += "<td class='text-center'>" + response[b].is_active + "</td>";
+                            html += "</tr>";
+                        }
+
+                        document.getElementById("gen_containers").innerHTML = html;
+                    }
+                }
         }
 
     </script>
@@ -158,7 +191,7 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             <div class="card-body">
 
                 <div>
-                    <table class="table table-striped table-hover" id="container_table" style="">
+                    <table class="table table-striped table-hover" id="profile_table" style="">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center">Select</th>
@@ -198,7 +231,24 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             <div class="card-body">
 
                 <div>
-                    
+                    <table class="table table-striped table-hover" id="container_table" style="">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-center">Select</th>
+                                <th scope="col" class="text-end">Profile Number</th>
+                                <th scope="col">Profile Name</th>
+                                <th scope="col">Disposal Facility</th>
+                                <th scope="col">Primary Facility</th>
+                                <th scope="col">Container Type</th>
+                                <th scope="col">Container Size</th>
+                                <th scope="col">WPC</th>
+                                <th scope="col" class="text-center">Active</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gen_containers">
+                            <!-- AJAX Handled -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
