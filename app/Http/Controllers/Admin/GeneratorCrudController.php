@@ -153,44 +153,23 @@ class GeneratorCrudController extends CrudController
         echo json_encode($data);
     }
 
-    public function getPricing_old() 
+    public function getPricing() 
     {
         if(isset($_GET['profile_id'])) {
-            $get_array = array($_GET['profile_id']);
+            $profiles = json_decode($_GET['profile_id']);
+            $result = array();
+            foreach ($profiles as $profile) {              
+                $prof_id = $profile;
 
-            foreach($get_array as $get) {
-                $prof_id = $get;
-            } 
+                $data = Pricing::where('profile_id', $prof_id)->with('profile')->with('waste')->with('waste.container')->with('waste.facility')->with('base')->get();
+            
+                array_push($result, $data);
+            }
+            echo json_encode($result);
         } else {
             $prof_id = 0;
-        }
-
-        $data = Pricing::where('profile_id', $prof_id)->with('profile')->with('waste')->with('waste.container')->with('waste.facility')->with('base')->get();
-
-        echo json_encode($data);
-    }
-
-    public function getPricing() 
-    {        
-        $profiles = json_decode($_GET['profile_id'], true);
-
-        //TODO: CANNOT PARSE. No EOF or , between different profiles. Probably bc of loop?
-
-        foreach ($profiles as $profile) {
-            if(isset($_GET['profile_id'])) {                
-                $prof_id = $profile;
     
-                $data = Pricing::where('profile_id', $prof_id)->with('profile')->with('waste')->with('waste.container')->with('waste.facility')->with('base')->get();
-    
-                echo json_encode($data);
-    
-            } else {
-                $prof_id = 0;
-    
-                echo json_encode('if(isset) == false currently.');
-            }
-
-            
+            echo json_encode('if(isset) == false currently.');
         }
     }
 }

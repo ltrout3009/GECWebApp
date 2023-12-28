@@ -34,6 +34,14 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
         .tab-green {
             background-color: #00a859;
         }
+
+        th.subheader {
+            font-size: x-small;
+        }
+
+        tr.subheader {
+            background-color: rgba(0, 0, 0, 0.075);
+        }
     </style>
 
     <script>
@@ -116,39 +124,8 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
         function getProfileContainers(profile_ids) {
             var prof_ids = [];
             prof_ids.push(profile_ids);
-            
-            /*
-            for (var a = 0; a < prof_ids.length; a++) {
-                var ajax = new XMLHttpRequest();
-                ajax.open("GET", "pricing-data?profile_id=[" + prof_ids + "]", true);
-                ajax.send();
 
-                ajax.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        var response = JSON.parse(this.responseText);
-                        var html = '';
-
-                        for (var b = 0; b < response.length; b++) {
-                            html += "<tr id='" + response[b].id + "'>";
-                                html += "<td class='hide text-center'>";
-                                        html += "<input type='checkbox' class='select' id='" + response[b].id +"'>";
-                                        html += "</td>";
-                                html += "<td class='text-end'>" + response[b].profile.number + "</td>";
-                                html += "<td>" + response[b].profile.name + "</td>";
-                                html += "<td>" + response[b].waste.facility.name + "</td>";
-                                html += "<td>" + "0" + "</td>";
-                                html += "<td class='text-center'>" + response[b].waste.container.category + "</td>";
-                                html += "<td class='text-end'>" + response[b].waste.container.size + "</td>";
-                                html += "<td class='text-end'>" + response[b].waste.wpc_id + "</td>";
-                                html += "<td class='text-center'>" + response[b].is_active + "</td>";
-                            html += "</tr>";
-                        }
-
-                        document.getElementById("gen_containers").innerHTML = html;
-                    }
-                }
-            }
-            */
+            openTab(event, 'Containers');
             
             var ajax = new XMLHttpRequest();
                 ajax.open("GET", "pricing-data?profile_id=[" + prof_ids + "]", true);
@@ -159,27 +136,49 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                         var response = JSON.parse(this.responseText);
                         var html = '';
 
-                        for (var b = 0; b < response.length; b++) {
-                            html += "<tr id='" + response[b].id + "'>";
-                                html += "<td class='hide text-center'>";
-                                        html += "<input type='checkbox' class='select' id='" + response[b].id +"'>";
-                                        html += "</td>";
-                                html += "<td class='text-end'>" + response[b].profile.number + "</td>";
-                                html += "<td>" + response[b].profile.name + "</td>";
-                                html += "<td>" + response[b].waste.facility.name + "</td>";
-                                html += "<td>" + "0" + "</td>";
-                                html += "<td class='text-center'>" + response[b].waste.container.category + "</td>";
-                                html += "<td class='text-end'>" + response[b].waste.container.size + "</td>";
-                                html += "<td class='text-end'>" + response[b].waste.wpc_id + "</td>";
-                                html += "<td class='text-center'>" + response[b].is_active + "</td>";
+                        html += "<thead>";
+                            html += "<tr>";
+                                html += "<th scope='col' class='text-center'>Select</th>";
+                                    html += "<th scope='col' class='text-end'>Profile Number</th>";
+                                    html += "<th scope='col'>Profile Name</th>";
+                                    html += "<th scope='col'>Disposal Facility</th>";
+                                    html += "<th scope='col' class='text-center'>Primary Facility</th>";
+                                    html += "<th scope='col' class='text-center'>Container Type</th>";
+                                    html += "<th scope='col' class='text-end'>Container Size</th>";
+                                    html += "<th scope='col' class='text-end'>WPC</th>";
+                                html += "<th scope='col' class='text-center'>Active</th>";
                             html += "</tr>";
+                        html += "</thead>";
+
+                        for (var a = 0; a < response.length; a++) {
+                            var pricing = response[a];
+
+                            html += "<tbody>";
+                                html += "<tr class='subheader'>";
+                                    html += "<th class='subheader' colspan='12'>" + pricing[a].profile.name + "</th>";
+                                html += "</tr>";
+
+                            for (var b = 0; b < pricing.length; b++) {
+                                html += "<tr id='" + pricing[b].id + "'>";
+                                    html += "<td class='hide text-center'>";
+                                        html += "<input type='checkbox' class='select' id='" + pricing[b].id +"'>";
+                                        html += "</td>";
+                                    html += "<td class='text-end'>" + pricing[b].profile.number + "</td>";
+                                    html += "<td>" + pricing[b].profile.name + "</td>";
+                                    html += "<td>" + pricing[b].waste.facility.name + "</td>";
+                                    html += "<td class='text-center'>" + "0" + "</td>";
+                                    html += "<td class='text-center'>" + pricing[b].waste.container.category + "</td>";
+                                    html += "<td class='text-end'>" + pricing[b].waste.container.size + "</td>";
+                                    html += "<td class='text-end'>" + pricing[b].waste.wpc_id + "</td>";
+                                    html += "<td class='text-center'>" + pricing[b].is_active + "</td>";
+                                html += "</tr>";
+                            }
+                            html += "</tbody>"                        
                         }
 
-                        document.getElementById("gen_containers").innerHTML = html;
+                        document.getElementById("container_table").innerHTML = html;
                     }
                 }
-                
-            
         }
 
     </script>
@@ -221,8 +220,8 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                 <!-- CONTENT -->
             <div class="card-body">
 
-                <div>
-                    <table class="table table-striped table-hover" id="profile_table" style="">
+                <div id="crudTable_wrapper" class="dataTables_wrapper dt-bootstrap5">
+                    <table class="table table-striped table-hover nowrap rounded card-table table-vcenter card d-table shadow-xs border-xs dataTable" id="profile_table">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center">Select</th>
@@ -262,23 +261,8 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
             <div class="card-body">
 
                 <div>
-                    <table class="table table-striped table-hover" id="container_table" style="">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center">Select</th>
-                                <th scope="col" class="text-end">Profile Number</th>
-                                <th scope="col">Profile Name</th>
-                                <th scope="col">Disposal Facility</th>
-                                <th scope="col">Primary Facility</th>
-                                <th scope="col">Container Type</th>
-                                <th scope="col">Container Size</th>
-                                <th scope="col">WPC</th>
-                                <th scope="col" class="text-center">Active</th>
-                            </tr>
-                        </thead>
-                        <tbody id="gen_containers">
-                            <!-- AJAX Handled -->
-                        </tbody>
+                    <table class="table table-striped table-hover nowrap rounded card-table table-vcenter card d-table shadow-xs border-xs" id="container_table" style="">
+                        <!-- HANDLED BY AJAX FUNCTION -->
                     </table>
                 </div>
             </div>
