@@ -116,13 +116,10 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
         function getProfileContainers(profile_ids) {
             var prof_ids = [];
             prof_ids.push(profile_ids);
-            
-            /* for (var a = 0; a < prof_ids.length; a++) {
-                
-            } */
-
-            var ajax = new XMLHttpRequest();
-                ajax.open("GET", "pricing-data?profile_id=" + prof_ids, true);
+            /*
+            for (var a = 0; a < prof_ids.length; a++) {
+                var ajax = new XMLHttpRequest();
+                ajax.open("GET", "pricing-data?profile_id=[" + prof_ids[a] + "]", true);
                 ajax.send();
 
                 ajax.onreadystatechange = function () {
@@ -149,6 +146,39 @@ $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
                         document.getElementById("gen_containers").innerHTML = html;
                     }
                 }
+            }
+            */
+
+            var ajax = new XMLHttpRequest();
+                ajax.open("GET", "pricing-data?profile_id=[" + prof_ids + "]", true);
+                ajax.send();
+
+                ajax.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        var html = '';
+
+                        for (var b = 0; b < response.length; b++) {
+                            html += "<tr id='" + response[b].id + "'>";
+                                html += "<td class='hide text-center'>";
+                                        html += "<input type='checkbox' class='select' id='" + response[b].id +"'>";
+                                        html += "</td>";
+                                html += "<td class='text-end'>" + response[b].profile.number + "</td>";
+                                html += "<td>" + response[b].profile.name + "</td>";
+                                html += "<td>" + response[b].waste.facility.name + "</td>";
+                                html += "<td>" + "0" + "</td>";
+                                html += "<td class='text-center'>" + response[b].waste.container.category + "</td>";
+                                html += "<td class='text-end'>" + response[b].waste.container.size + "</td>";
+                                html += "<td class='text-end'>" + response[b].waste.wpc_id + "</td>";
+                                html += "<td class='text-center'>" + response[b].is_active + "</td>";
+                            html += "</tr>";
+                        }
+
+                        document.getElementById("gen_containers").innerHTML = html;
+                    }
+                }
+
+            
         }
 
     </script>

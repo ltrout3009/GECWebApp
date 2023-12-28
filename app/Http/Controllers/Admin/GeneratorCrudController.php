@@ -171,20 +171,22 @@ class GeneratorCrudController extends CrudController
     }
 
     public function getPricing() 
-    {
-        $get_array = array($_GET['profile_id']);
+    {        
+        $profiles = json_decode($_GET['profile_id']);
 
-        foreach ($get_array as $get) {
-            if(isset($_GET[$get])) {                
-                $prof_id = $_GET[$get];
+        //TODO: CANNOT PARSE. No EOF or , between different profiles. Probably bc of loop?
 
+        foreach ($profiles as $profile) {
+            if(isset($_GET['profile_id'])) {                
+                $prof_id = $profile;
+    
                 $data = Pricing::where('profile_id', $prof_id)->with('profile')->with('waste')->with('waste.container')->with('waste.facility')->with('base')->get();
-
+    
                 echo json_encode($data);
-
+    
             } else {
                 $prof_id = 0;
-
+    
                 echo json_encode('if(isset) == false currently.');
             }
         }
