@@ -106,7 +106,7 @@
             </form>
         @endif
     </div>
-    <div class="{{ backpack_theme_config('classes.tableWrapper') }}">
+    <div id="crudTable_wrapper" class="{{ backpack_theme_config('classes.tableWrapper') }}">
         <table
                 class="{{ backpack_theme_config('classes.table') ?? 'table table-striped table-hover nowrap rounded card-table table-vcenter card d-table shadow-xs border-xs' }}"
                 cellspacing="0"
