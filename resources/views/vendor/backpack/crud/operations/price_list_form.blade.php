@@ -32,17 +32,15 @@
 
 
 <style>
+
     .tab-green {
         background-color: #00a859;
     }
 
-    th.subheader {
-        font-size: x-small;
+    .selected-row {
+        background-color: #00a859;
     }
 
-    tr.subheader {
-        background-color: rgba(0, 0, 0, 0.075);
-    }
 </style>
 
 <script>
@@ -75,6 +73,11 @@
             getProfileContainers(profile_ids);
         }
     }
+    
+    function selectedRowBackground() {
+       //TODO 
+    }
+
 
     function openTab(evt, tabName) {
         var i, x, tablinks;
@@ -106,7 +109,7 @@
                 for (var a = 0; a < response.length; a++) {
                     html += "<tr id='" + response[a].id + "'>";
                     html += "<td class='hide text-center'>";
-                    html += "<input type='checkbox' class='select' id='" + response[a].id + "'>";
+                    html += "<input type='checkbox' name='chngrow' class='select' id='" + response[a].id + "'>";
                     html += "</td>";
                     html += "<td class='text-end'>" + response[a].number + "</td>";
                     html += "<td>" + response[a].name + "</td>";
@@ -138,25 +141,27 @@
 
                 html += "<thead>";
                 html += "<tr>";
-                html += "<th scope='col' class='text-center'>Select</th>";
-                html += "<th scope='col' class='text-end'>Profile Number</th>";
-                html += "<th scope='col'>Profile Name</th>";
-                html += "<th scope='col'>Disposal Facility</th>";
-                html += "<th scope='col' class='text-center'>Primary Facility</th>";
-                html += "<th scope='col' class='text-center'>Container Type</th>";
-                html += "<th scope='col' class='text-center'>Container Size</th>";
-                html += "<th scope='col' class='text-end'>WPC</th>";
-                html += "<th scope='col' class='text-center'>Active</th>";
+                html += "<th class='text-center'>Select</th>";
+                html += "<th class='text-end'>Profile Number</th>";
+                html += "<th>Profile Name</th>";
+                html += "<th>Disposal Facility</th>";
+                html += "<th class='text-center'>Primary Facility</th>";
+                html += "<th class='text-center'>Container Type</th>";
+                html += "<th class='text-center'>Container Size</th>";
+                html += "<th class='text-end'>WPC</th>";
+                html += "<th class='text-center'>Active</th>";
                 html += "</tr>";
                 html += "</thead>";
 
                 for (var a = 0; a < response.length; a++) {
                     var pricing = response[a];
 
-                    html += "<tbody>";
-                    html += "<tr class='subheader'>";
-                    html += "<th class='subheader' colspan='12'>" + pricing[a].profile.name + "</th>";
+                    html += "<thead>";
+                    html += "<tr>";
+                    html += "<th colspan='12'>" + pricing[a].profile.name + "</th>";
                     html += "</tr>";
+                    html += "</thead>";
+                    html += "<tbody>";
 
                     for (var b = 0; b < pricing.length; b++) {
                         html += "<tr id='" + pricing[b].id + "'>";
@@ -173,7 +178,7 @@
                         html += "<td class='text-center'>" + pricing[b].is_active + "</td>";
                         html += "</tr>";
                     }
-                    html += "</tbody>"
+                    html += "</tbody>";
                 }
 
                 document.getElementById("container_table").innerHTML = html;
@@ -217,40 +222,32 @@
 
         </div>
         <!-- CONTENT -->
-        <div class="card-body">
+        <div id="crudTable_wrapper" class="{{ backpack_theme_config('classes.tableWrapper') }}">
+            <table id="profile_table" class="{{ backpack_theme_config('classes.table') }}" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="text-center">Select</th>
+                        <th class="text-end">Number</th>
+                        <th>Name</th>
+                        <th>Primary Disposal Facility</th>
+                        <th>Status</th>
+                        <th class="text-center">Enterprise</th>
+                    </tr>
+                </thead>
+                <tbody id="gen_profiles">
 
-            <div class="row" bp-section="crud-operation-list">
-
-                <div id="crudTable_wrapper" class="{{ backpack_theme_config('classes.tableWrapper') }}">
-                    <table id="profile_table" class="{{ backpack_theme_config('classes.table') }}" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Select</th>
-                                <th class="text-end">Number</th>
-                                <th>Name</th>
-                                <th>Primary Disposal Facility</th>
-                                <th>Status</th>
-                                <th class="text-center">Enterprise</th>
-                            </tr>
-                        </thead>
-                        <tbody id="gen_profiles">
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th class="text-center">Select</th>
-                                <th class="text-end">Number</th>
-                                <th>Name</th>
-                                <th>Primary Disposal Facility</th>
-                                <th>Status</th>
-                                <th class="text-center">Enterprise</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-            </div>
-
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="text-center">Select</th>
+                        <th class="text-end">Number</th>
+                        <th>Name</th>
+                        <th>Primary Disposal Facility</th>
+                        <th>Status</th>
+                        <th class="text-center">Enterprise</th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
 
@@ -272,13 +269,10 @@
 
         </div>
         <!-- CONTENT -->
-        <div class="card-body">
-
-            <div>
-                <table class="table table-striped table-hover nowrap rounded card-table table-vcenter card d-table shadow-xs border-xs" id="container_table" style="">
-                    <!-- HANDLED BY AJAX FUNCTION -->
-                </table>
-            </div>
+        <div id="crudTable_wrapper" class="{{ backpack_theme_config('classes.tableWrapper') }}">
+            <table id="container_table" class="{{ backpack_theme_config('classes.table') }}" cellspacing="0">
+                <!-- HANDLED BY AJAX FUNCTION -->
+            </table>
         </div>
     </div>
 

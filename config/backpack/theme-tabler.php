@@ -151,7 +151,7 @@ return [
          * Use this to pass classes to the table displayed in List Operation
          * It defaults to: "table table-striped table-hover nowrap rounded card-table table-vcenter card-table shadow-xs border-xs"
          */
-        'table' => 'table table-striped table-hover nowrap rounded card-table table-vcenter card d-table shadow-xs border-xs dataTable',
+        'table' => 'table table-striped table-hover nowrap rounded card-table table-vcenter card-table d-table shadow-xs border-xs dataTable',
 
         /**
          * Use this to pass classes to the table wrapper component displayed in List Operation
