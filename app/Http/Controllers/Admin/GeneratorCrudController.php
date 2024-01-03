@@ -153,7 +153,7 @@ class GeneratorCrudController extends CrudController
         echo json_encode($data);
     }
 
-    public function getPricing() 
+    public function getContainers() 
     {
         if(isset($_GET['profile_id'])) {
             $profiles = json_decode($_GET['profile_id']);
@@ -172,4 +172,25 @@ class GeneratorCrudController extends CrudController
             echo json_encode('if(isset) == false currently.');
         }
     }
+
+    public function getPricing()
+    {
+        if (isset($_GET['pricing_id'])) {
+            $pricings = json_decode($_GET['pricing_id']);
+            $result = array();
+            foreach ($pricings as $pricing) {
+                $price_id = $pricing;
+
+                $data = Pricing::where('id', $price_id)->with('profile')->with('waste')->with('waste.container')->with('waste.facility')->with('base')->get();
+
+                array_push($result, $data);
+            }
+            echo json_encode($result);
+        } else {
+            $price_id = 0;
+
+            echo json_encode('if(isset) == false currently.');
+        }
+    }
+
 }

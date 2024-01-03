@@ -3,13 +3,13 @@
 
 
 @php
-    $defaultBreadcrumbs = [
-        trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
-        $crud->entity_name_plural => url($crud->route),
-        'RentBox' => false,
-    ];
+$defaultBreadcrumbs = [
+trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
+$crud->entity_name_plural => url($crud->route),
+'RentBox' => false,
+];
 
-    $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
+$breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
 @endphp
 
 
@@ -32,7 +32,6 @@
 
 
 <style>
-
     .tab-green {
         background-color: #00a859;
     }
@@ -41,43 +40,17 @@
         background-color: #00a859;
     }
 
+    .btn-toolbar {
+        display: flex;
+        flex-direction: row;
+        column-gap: 20px;
+    }
 </style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         getProfileData();
     });
-
-    function selectProfiles() {
-
-        var profile_ids = [];
-
-        if (document.querySelectorAll('input[type="checkbox"]:checked').length == 0) {
-            new Noty({
-                type: "warning",
-                text: "<strong>No rows selected.</strong>"
-            }).show();
-            return
-        } else {
-            document.querySelectorAll('input[type="checkbox"]:checked').forEach(e => {
-                var prof_id = e.getAttribute("id");
-
-                profile_ids.push(prof_id);
-
-                new Noty({
-                    type: "success",
-                    text: "<strong>Success!</strong><br>Profile ID: " + prof_id
-                }).show();
-            });
-
-            getProfileContainers(profile_ids);
-        }
-    }
-    
-    function selectedRowBackground() {
-       //TODO 
-    }
-
 
     function openTab(evt, tabName) {
         var i, x, tablinks;
@@ -91,6 +64,11 @@
         }
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " tab-green";
+    }
+
+
+    function selectedRowBackground() {
+        //TODO 
     }
 
     function getProfileData() {
@@ -109,7 +87,7 @@
                 for (var a = 0; a < response.length; a++) {
                     html += "<tr id='" + response[a].id + "'>";
                     html += "<td class='hide text-center'>";
-                    html += "<input type='checkbox' name='chngrow' class='select' id='" + response[a].id + "'>";
+                    html += "<input type='checkbox' name='chngrow' class='select profile_selector' id='" + response[a].id + "'>";
                     html += "</td>";
                     html += "<td class='text-end'>" + response[a].number + "</td>";
                     html += "<td>" + response[a].name + "</td>";
@@ -124,6 +102,32 @@
         }
     }
 
+    function selectProfiles() {
+
+        var profile_ids = [];
+
+        if (document.querySelectorAll('.profile_selector:checked').length == 0) {
+            new Noty({
+                type: "warning",
+                text: "<strong>No rows selected.</strong>"
+            }).show();
+            return
+        } else {
+            document.querySelectorAll('.profile_selector:checked').forEach(e => {
+                var prof_id = e.getAttribute("id");
+
+                profile_ids.push(prof_id);
+
+                new Noty({
+                    type: "success",
+                    text: "<strong>Success!</strong><br>Profile ID: " + prof_id
+                }).show();
+            });
+
+            getProfileContainers(profile_ids);
+        }
+    }
+
     function getProfileContainers(profile_ids) {
         var prof_ids = [];
         prof_ids.push(profile_ids);
@@ -131,7 +135,7 @@
         openTab(event, 'Containers');
 
         var ajax = new XMLHttpRequest();
-        ajax.open("GET", "pricing-data?profile_id=[" + prof_ids + "]", true);
+        ajax.open("GET", "container-data?profile_id=[" + prof_ids + "]", true);
         ajax.send();
 
         ajax.onreadystatechange = function() {
@@ -166,12 +170,12 @@
                     for (var b = 0; b < pricing.length; b++) {
                         html += "<tr id='" + pricing[b].id + "'>";
                         html += "<td class='hide text-center'>";
-                        html += "<input type='checkbox' class='select' id='" + pricing[b].id + "'>";
+                        html += "<input type='checkbox' class='select container_selector' id='" + pricing[b].id + "'>";
                         html += "</td>";
                         html += "<td class='text-end'>" + pricing[b].profile.number + "</td>";
                         html += "<td>" + pricing[b].profile.name + "</td>";
                         html += "<td>" + pricing[b].waste.facility.name + "</td>";
-                        html += "<td class='text-center'>" + "0" + "</td>";
+                        html += "<td class='text-center'>" + "0" + "</td>"; //TODO - primary facility??
                         html += "<td class='text-center'>" + pricing[b].waste.container.category + "</td>";
                         html += "<td class='text-center'>" + pricing[b].waste.container.size + "</td>";
                         html += "<td class='text-end'>" + pricing[b].waste.wpc_id + "</td>";
@@ -182,6 +186,83 @@
                 }
 
                 document.getElementById("container_table").innerHTML = html;
+            }
+        }
+    }
+
+    function selectContainers() {
+        var pricing_ids = [];
+
+        if (document.querySelectorAll('.container_selector:checked').length == 0) {
+            new Noty({
+                type: "warning",
+                text: "<strong>No rows selected.</strong>"
+            }).show();
+            return
+        } else {
+            document.querySelectorAll('.container_selector:checked').forEach(e => {
+                var price_id = e.getAttribute("id");
+
+                pricing_ids.push(price_id);
+
+                new Noty({
+                    type: "success",
+                    text: "<strong>Success!</strong><br>Profile ID: " + price_id
+                }).show();
+            });
+
+            getProfilePricing(pricing_ids);
+        }
+    }
+
+    function getProfilePricing(pricing_ids) {
+        var price_ids = [];
+        price_ids.push(pricing_ids);
+
+        openTab(event, 'Pricing');
+
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", "pricing-data?pricing_id=[" + price_ids + "]", true);
+        ajax.send();
+
+        ajax.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(this.responseText);
+                var html = '';
+
+                html += "<thead>";
+                html += "<tr>";
+                html += "<th>Generator / Profile</th>";
+                html += "<th>Container / Current Cost / Price</th>";
+                html += "<th>Breakeven / Margin</th>";
+                html += "<th>Pricing</th>";
+                html += "</tr>";
+                html += "</thead>";
+
+                // TODO - fix loop
+
+                for (var a = 0; a < response.length; a++) {
+                    var pricing = response[a];
+
+                    html += "<thead>";
+                    html += "<tr>";
+                    html += "<th colspan='12'>" + pricing[a].profile.name + "</th>";
+                    html += "</tr>";
+                    html += "</thead>";
+                    html += "<tbody>";
+
+                    for (var b = 0; b < pricing.length; b++) {
+                        html += "<tr id='" + pricing[b].id + "'>";
+                        html += "<td>" + pricing[b].profile.number + "</td>";
+                        html += "<td>" + pricing[b].profile.name + "</td>";
+                        html += "<td>" + pricing[b].waste.facility.name + "</td>";
+                        html += "<td>" + pricing[b].waste.container.category + "</td>";
+                        html += "</tr>";
+                    }
+                    html += "</tbody>"; 
+                }
+
+                document.getElementById("pricing_table").innerHTML = html;
             }
         }
     }
@@ -263,7 +344,10 @@
             <!-- BUTTONS -->
             <div class="btn-toolbar">
                 <div class="btn-group">
-
+                    <button class="btn btn-danger" onclick="openTab(event, 'Profiles');">Back to Profiles</button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="selectContainers();">Continue with Selected Containers</button>
                 </div>
             </div>
 
@@ -271,6 +355,34 @@
         <!-- CONTENT -->
         <div id="crudTable_wrapper" class="{{ backpack_theme_config('classes.tableWrapper') }}">
             <table id="container_table" class="{{ backpack_theme_config('classes.table') }}" cellspacing="0">
+                <!-- HANDLED BY AJAX FUNCTION -->
+            </table>
+        </div>
+    </div>
+
+
+    <!-- TAB - Pricing -->
+    <div class="card tab" id="Pricing" style="display:none;">
+
+        <div class="card-body">
+
+            <h2 class="card-title">Pricing</h2>
+            <h4 class="card-subtitle">{{$entry->FullGenerator}}</h4>
+
+            <!-- BUTTONS -->
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button class="btn btn-danger" onclick="openTab(event, 'Containers');">Back to Containers</button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="">Create Price List</button>
+                </div>
+            </div>
+
+        </div>
+        <!-- CONTENT -->
+        <div id="crudTable_wrapper" class="{{ backpack_theme_config('classes.tableWrapper') }}">
+            <table id="pricing_table" class="{{ backpack_theme_config('classes.table') }}" cellspacing="0">
                 <!-- HANDLED BY AJAX FUNCTION -->
             </table>
         </div>
